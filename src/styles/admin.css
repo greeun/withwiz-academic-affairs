@@ -115,6 +115,54 @@
   letter-spacing: 0.08em;
 }
 
+.admin-sidebar-group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-sidebar-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.admin-sidebar-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.admin-sidebar-link-active {
+  background: var(--admin-sidebar-active-bg, #1a1a1a);
+  color: var(--admin-sidebar-text-hover, #fff);
+  box-shadow: inset 3px 0 0 var(--admin-sidebar-active-bar, transparent);
+  font-weight: 600;
+}
+
+.admin-sidebar-collapsed .admin-sidebar-link {
+  justify-content: center;
+  gap: 0;
+}
+.admin-sidebar-collapsed .admin-sidebar-icon {
+  width: 20px;
+  height: 20px;
+}
+
 .admin-sidebar-footer {
   padding: 16px 0;
   border-top: 1px solid var(--admin-sidebar-border, #333);

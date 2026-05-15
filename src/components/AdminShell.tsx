@@ -246,6 +246,7 @@ export default function AdminShell({ config, children }: Props) {
                         (active ? " admin-sidebar-link-active" : "")
                       }
                       title={item.label}
+                      aria-label={item.label}
                       aria-current={active ? "page" : undefined}
                       onClick={() => setMobileOpen(false)}
                     >
@@ -254,6 +255,7 @@ export default function AdminShell({ config, children }: Props) {
                           {item.icon}
                         </span>
                       ) : null}
+                      {/* collapsed: icon-only (label via aria-label) else shortLabel; expanded: full label */}
                       <span className="admin-sidebar-label">
                         {collapsed
                           ? item.icon

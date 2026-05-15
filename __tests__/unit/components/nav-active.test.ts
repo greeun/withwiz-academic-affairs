@@ -7,7 +7,7 @@ describe('isNavItemActive', () => {
   });
 
   it('nested path activates its parent nav item', () => {
-    expect(isNavItemActive('/admin/attendance/daily', '/admin/attendance/daily')).toBe(true);
+    expect(isNavItemActive('/admin/attendance/daily', '/admin/attendance')).toBe(true);
     expect(isNavItemActive('/admin/blog/123/edit', '/admin/blog')).toBe(true);
   });
 

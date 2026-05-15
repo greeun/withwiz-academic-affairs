@@ -151,27 +151,27 @@
   margin-bottom: 24px;
 }
 
-.admin-page-title { font-size: 1.6rem; font-weight: 700; color: #111; }
+.admin-page-title { font-size: 1.6rem; font-weight: 700; color: var(--admin-text, #111); }
 
 /* Buttons */
-.admin-btn-primary { background: #111; color: #fff; border: none; padding: 10px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-.admin-btn-primary:hover { opacity: 0.85; }
+.admin-btn-primary { background: var(--admin-primary, #111); color: var(--admin-primary-fg, #fff); border: none; padding: 10px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; border-radius: var(--admin-radius, 0); }
+.admin-btn-primary:hover { opacity: 0.85; background: var(--admin-primary-hover, var(--admin-primary, #111)); }
 .admin-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-.admin-btn-secondary { background: #fff; color: #333; border: 1px solid #ddd; padding: 10px 24px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
-.admin-btn-secondary:hover { background: #f0f0f0; }
-.admin-btn-danger { background: #dc2626; color: #fff; border: none; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; }
-.admin-btn-danger:hover { background: #b91c1c; }
+.admin-btn-secondary { background: #fff; color: var(--admin-text, #333); border: 1px solid var(--admin-border, #ddd); padding: 10px 24px; font-size: 1rem; cursor: pointer; transition: background 0.2s; border-radius: var(--admin-radius, 0); }
+.admin-btn-secondary:hover { background: var(--admin-surface, #f0f0f0); }
+.admin-btn-danger { background: var(--admin-danger, #dc2626); color: #fff; border: none; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; border-radius: var(--admin-radius, 0); }
+.admin-btn-danger:hover { background: var(--admin-danger, #b91c1c); }
 
 /* Table */
-.admin-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e5e5; }
-.admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #eee; font-size: 1rem; color: #222; }
-.admin-table th { background: #fafafa; font-weight: 600; color: #333; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.admin-table tr:hover td { background: #fafafa; }
+.admin-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--admin-border, #e5e5e5); border-radius: var(--admin-radius, 0); overflow: hidden; }
+.admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--admin-border, #eee); font-size: 1rem; color: #222; }
+.admin-table th { background: var(--admin-surface, #fafafa); font-weight: 600; color: var(--admin-text-muted, #333); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.admin-table tr:hover td { background: var(--admin-surface, #fafafa); }
 
 /* Badges */
-.admin-badge { display: inline-block; padding: 3px 10px; font-size: 0.85rem; font-weight: 600; border-radius: 12px; }
-.admin-badge-published { background: #d1fae5; color: #065f46; }
-.admin-badge-draft { background: #fee2e2; color: #991b1b; }
+.admin-badge { display: inline-block; padding: 3px 10px; font-size: 0.85rem; font-weight: 600; border-radius: var(--admin-radius-pill, 12px); }
+.admin-badge-published { background: var(--admin-success-bg, #d1fae5); color: var(--admin-success, #065f46); }
+.admin-badge-draft { background: var(--admin-danger-bg, #fee2e2); color: var(--admin-danger, #991b1b); }
 
 /* Form */
 .admin-form-group { margin-bottom: 20px; }
@@ -183,17 +183,17 @@
 .admin-form-group input[type="password"],
 .admin-form-group input[type="number"],
 .admin-form-group select {
-  width: 100%; height: 42px; padding: 0 12px; border: 1px solid #ddd; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; box-sizing: border-box; background: #fff;
+  width: 100%; height: 42px; padding: 0 12px; border: 1px solid var(--admin-border, #ddd); font-size: 1rem; font-family: inherit; transition: border-color 0.2s; box-sizing: border-box; background: #fff; border-radius: var(--admin-radius, 0);
 }
-.admin-form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; font-size: 1rem; font-family: inherit; box-sizing: border-box; background: #fff; }
-.admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: none; border-color: #111; }
+.admin-form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--admin-border, #ddd); font-size: 1rem; font-family: inherit; box-sizing: border-box; background: #fff; border-radius: var(--admin-radius, 0); }
+.admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: none; border-color: var(--admin-brand, #111); }
 
-.admin-form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; }
+.admin-form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--admin-border, #eee); }
 
 /* Tabs */
-.admin-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid #eee; }
+.admin-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid var(--admin-border, #eee); }
 .admin-tab { padding: 10px 20px; border: none; background: none; font-size: 1rem; font-weight: 600; color: #666; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: color 0.2s; }
-.admin-tab.active { color: #111; border-bottom-color: #111; }
+.admin-tab.active { color: var(--admin-text, #111); border-bottom-color: var(--admin-brand, #111); }
 
 /* Empty */
 .admin-empty { text-align: center; padding: 60px 20px; color: #666; font-size: 1.05rem; }

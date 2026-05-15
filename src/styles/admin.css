@@ -160,10 +160,10 @@
 .admin-btn-secondary { background: #fff; color: var(--admin-text, #333); border: 1px solid var(--admin-border, #ddd); padding: 10px 24px; font-size: 1rem; cursor: pointer; transition: background 0.2s; border-radius: var(--admin-radius, 0); }
 .admin-btn-secondary:hover { background: var(--admin-surface, #f0f0f0); }
 .admin-btn-danger { background: var(--admin-danger, #dc2626); color: #fff; border: none; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; border-radius: var(--admin-radius, 0); }
-.admin-btn-danger:hover { background: var(--admin-danger, #b91c1c); }
+.admin-btn-danger:hover { background: var(--admin-danger-hover, #b91c1c); }
 
 /* Table */
-.admin-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--admin-border, #e5e5e5); border-radius: var(--admin-radius, 0); overflow: hidden; }
+.admin-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--admin-border, #e5e5e5); border-radius: var(--admin-radius, 0); overflow: hidden; /* clip cells to tokened border-radius; harmless at radius 0 */ }
 .admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--admin-border, #eee); font-size: 1rem; color: #222; }
 .admin-table th { background: var(--admin-surface, #fafafa); font-weight: 600; color: var(--admin-text-muted, #333); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
 .admin-table tr:hover td { background: var(--admin-surface, #fafafa); }

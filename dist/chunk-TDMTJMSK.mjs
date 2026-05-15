@@ -235,6 +235,7 @@ function AdminShell({ config, children }) {
                     href: item.href,
                     className: "admin-sidebar-link" + (active ? " admin-sidebar-link-active" : ""),
                     title: item.label,
+                    "aria-label": item.label,
                     "aria-current": active ? "page" : void 0,
                     onClick: () => setMobileOpen(false),
                     children: [
@@ -272,4 +273,4 @@ function AdminShell({ config, children }) {
 export {
   AdminShell
 };
-//# sourceMappingURL=chunk-WCSVLVFS.mjs.map
+//# sourceMappingURL=chunk-TDMTJMSK.mjs.map

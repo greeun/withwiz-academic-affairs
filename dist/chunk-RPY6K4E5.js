@@ -7,6 +7,39 @@ var _react = require('react');
 var _link = require('next/link'); var _link2 = _interopRequireDefault(_link);
 var _navigation = require('next/navigation');
 var _dynamic = require('next/dynamic'); var _dynamic2 = _interopRequireDefault(_dynamic);
+
+// src/components/nav-active.ts
+function isNavItemActive(pathname, href) {
+  const p = pathname.replace(/\/+$/, "");
+  const h = href.replace(/\/+$/, "");
+  if (p === h) return true;
+  return p.startsWith(h + "/");
+}
+
+// src/components/nav-groups.ts
+var STORAGE_KEY = "admin_collapsed_groups";
+function toggleGroupCollapsed(collapsed, group) {
+  return collapsed.includes(group) ? collapsed.filter((g) => g !== group) : [...collapsed, group];
+}
+function loadCollapsedGroups() {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((x) => typeof x === "string") : [];
+  } catch (e2) {
+    return [];
+  }
+}
+function saveCollapsedGroups(collapsed) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(collapsed));
+  } catch (e3) {
+  }
+}
+
+// src/components/AdminShell.tsx
 var _jsxruntime = require('react/jsx-runtime');
 var Toaster = _dynamic2.default.call(void 0, 
   () => Promise.resolve().then(() => _interopRequireWildcard(require("sonner"))).then((m) => m.Toaster),
@@ -20,6 +53,17 @@ function AdminShell({ config, children }) {
   const [checking, setChecking] = _react.useState.call(void 0, true);
   const [user, setUser] = _react.useState.call(void 0, null);
   const [mobileOpen, setMobileOpen] = _react.useState.call(void 0, false);
+  const [collapsedGroups, setCollapsedGroups] = _react.useState.call(void 0, []);
+  _react.useEffect.call(void 0, () => {
+    setCollapsedGroups(loadCollapsedGroups());
+  }, []);
+  function onToggleGroup(group) {
+    setCollapsedGroups((prev) => {
+      const next = toggleGroupCollapsed(prev, group);
+      saveCollapsedGroups(next);
+      return next;
+    });
+  }
   const [collapsed, setCollapsed] = _react.useState.call(void 0, () => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("admin_sidebar_collapsed") === "true";
@@ -61,7 +105,7 @@ function AdminShell({ config, children }) {
             (prev) => _optionalChain([prev, 'optionalAccess', _3 => _3.email]) === u.email && _optionalChain([prev, 'optionalAccess', _4 => _4.id]) === u.id ? prev : u
           );
         }
-      } catch (e2) {
+      } catch (e4) {
         if (!cancelled) {
           routerRef.current.replace(config.auth.loginPath);
           return;
@@ -99,7 +143,7 @@ function AdminShell({ config, children }) {
   async function handleLogout() {
     try {
       await _chunkFJCSRKGNjs.adminFetch.call(void 0, config.auth.logoutEndpoint, { method: "POST" });
-    } catch (e3) {
+    } catch (e5) {
     } finally {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
@@ -168,16 +212,36 @@ function AdminShell({ config, children }) {
             return config.navigation.map((item) => {
               const showGroup = !collapsed && item.group && item.group !== lastGroup;
               lastGroup = item.group;
+              const groupCollapsed = !!item.group && collapsedGroups.includes(item.group);
+              const hidden = !collapsed && groupCollapsed;
+              const active = isNavItemActive(pathname, item.href);
               return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, "div", { children: [
-                showGroup && /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className: "admin-sidebar-group", children: item.group }),
-                /* @__PURE__ */ _jsxruntime.jsx.call(void 0, 
+                showGroup && item.group && /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, 
+                  "button",
+                  {
+                    type: "button",
+                    className: "admin-sidebar-group admin-sidebar-group-toggle",
+                    onClick: () => onToggleGroup(item.group),
+                    "aria-expanded": !groupCollapsed,
+                    children: [
+                      /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "span", { children: item.group }),
+                      /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "span", { "aria-hidden": "true", children: groupCollapsed ? "\u25B8" : "\u25BE" })
+                    ]
+                  }
+                ),
+                !hidden && /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, 
                   _link2.default,
                   {
                     href: item.href,
-                    className: "admin-sidebar-link",
+                    className: "admin-sidebar-link" + (active ? " admin-sidebar-link-active" : ""),
                     title: item.label,
+                    "aria-label": item.label,
+                    "aria-current": active ? "page" : void 0,
                     onClick: () => setMobileOpen(false),
-                    children: collapsed ? item.shortLabel : item.label
+                    children: [
+                      item.icon ? /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "span", { className: "admin-sidebar-icon", "aria-hidden": "true", children: item.icon }) : null,
+                      /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "span", { className: "admin-sidebar-label", children: collapsed ? item.icon ? "" : item.shortLabel : item.label })
+                    ]
                   }
                 )
               ] }, item.href);
@@ -209,4 +273,4 @@ function AdminShell({ config, children }) {
 
 
 exports.AdminShell = AdminShell;
-//# sourceMappingURL=chunk-T342K4HV.js.map
+//# sourceMappingURL=chunk-RPY6K4E5.js.map

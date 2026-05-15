@@ -42,7 +42,7 @@
 }
 
 .admin-logo-home {
-  color: #fff;
+  color: var(--admin-sidebar-text, #fff);
   text-decoration: none;
   transition: color 0.2s;
 }

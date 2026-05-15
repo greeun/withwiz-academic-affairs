@@ -1,0 +1,113 @@
+{
+  "name": "@withwiz/academic-affairs",
+  "version": "0.1.0",
+  "description": "Academic Affairs Management System - 학사관리 어드민 프레임워크",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.mjs",
+      "require": "./dist/components/index.js"
+    },
+    "./components/AdminShell": {
+      "types": "./dist/components/AdminShell.d.ts",
+      "import": "./dist/components/AdminShell.mjs",
+      "require": "./dist/components/AdminShell.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks/index.mjs",
+      "require": "./dist/hooks/index.js"
+    },
+    "./services": {
+      "types": "./dist/services/index.d.ts",
+      "import": "./dist/services/index.mjs",
+      "require": "./dist/services/index.js"
+    },
+    "./handlers": {
+      "types": "./dist/handlers/index.d.ts",
+      "import": "./dist/handlers/index.mjs",
+      "require": "./dist/handlers/index.js"
+    },
+    "./infrastructure": {
+      "types": "./dist/infrastructure/index.d.ts",
+      "import": "./dist/infrastructure/index.mjs",
+      "require": "./dist/infrastructure/index.js"
+    },
+    "./infrastructure/middleware": {
+      "types": "./dist/infrastructure/middleware/index.d.ts",
+      "import": "./dist/infrastructure/middleware/index.mjs",
+      "require": "./dist/infrastructure/middleware/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.mjs",
+      "require": "./dist/types/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.mjs",
+      "require": "./dist/utils/index.js"
+    },
+    "./utils/admin-fetch": {
+      "types": "./dist/utils/admin-fetch.d.ts",
+      "import": "./dist/utils/admin-fetch.mjs",
+      "require": "./dist/utils/admin-fetch.js"
+    },
+    "./validators": {
+      "types": "./dist/validators/index.d.ts",
+      "import": "./dist/validators/index.mjs",
+      "require": "./dist/validators/index.js"
+    },
+    "./styles/admin.css": "./dist/styles/admin.css"
+  },
+  "files": [
+    "dist",
+    "prisma",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.13.0",
+    "@tiptap/core": "^3.0.0",
+    "@tiptap/react": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@withwiz/toolkit": ">=0.5.0",
+    "next": ">=15",
+    "react": ">=18",
+    "sonner": ">=2",
+    "zod": ">=3"
+  },
+  "peerDependenciesMeta": {
+    "sonner": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^22.19.18",
+    "@types/react": "^19.2.14",
+    "@withwiz/toolkit": "file:../withwiz-toolkit",
+    "jsdom": "^26.1.0",
+    "next": "^16.2.6",
+    "sonner": "^2.0.7",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "zod": "^3.25.76"
+  }
+}

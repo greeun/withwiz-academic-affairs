@@ -6,6 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { AdminShellConfig } from "./AdminShellConfig";
 import { adminFetch } from "../utils/admin-fetch";
+import { isNavItemActive } from "./nav-active";
+import { loadCollapsedGroups, saveCollapsedGroups, toggleGroupCollapsed } from "./nav-groups";
 
 const Toaster = dynamic(
   () => import("sonner").then((m) => m.Toaster),
@@ -32,6 +34,19 @@ export default function AdminShell({ config, children }: Props) {
   const [checking, setChecking] = useState(true);
   const [user, setUser] = useState<AdminUser | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
+  useEffect(() => {
+    setCollapsedGroups(loadCollapsedGroups());
+  }, []);
+
+  function onToggleGroup(group: string) {
+    setCollapsedGroups((prev) => {
+      const next = toggleGroupCollapsed(prev, group);
+      saveCollapsedGroups(next);
+      return next;
+    });
+  }
+
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("admin_sidebar_collapsed") === "true";
@@ -203,21 +218,51 @@ export default function AdminShell({ config, children }: Props) {
           {(() => {
             let lastGroup: string | undefined;
             return config.navigation.map((item) => {
-              const showGroup = !collapsed && item.group && item.group !== lastGroup;
+              const showGroup =
+                !collapsed && item.group && item.group !== lastGroup;
               lastGroup = item.group;
+              const groupCollapsed =
+                !!item.group && collapsedGroups.includes(item.group);
+              const hidden = !collapsed && groupCollapsed;
+              const active = isNavItemActive(pathname, item.href);
               return (
                 <div key={item.href}>
-                  {showGroup && (
-                    <div className="admin-sidebar-group">{item.group}</div>
+                  {showGroup && item.group && (
+                    <button
+                      type="button"
+                      className="admin-sidebar-group admin-sidebar-group-toggle"
+                      onClick={() => onToggleGroup(item.group!)}
+                      aria-expanded={!groupCollapsed}
+                    >
+                      <span>{item.group}</span>
+                      <span aria-hidden="true">{groupCollapsed ? "▸" : "▾"}</span>
+                    </button>
                   )}
-                  <Link
-                    href={item.href}
-                    className="admin-sidebar-link"
-                    title={item.label}
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {collapsed ? item.shortLabel : item.label}
-                  </Link>
+                  {!hidden && (
+                    <Link
+                      href={item.href}
+                      className={
+                        "admin-sidebar-link" +
+                        (active ? " admin-sidebar-link-active" : "")
+                      }
+                      title={item.label}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.icon ? (
+                        <span className="admin-sidebar-icon" aria-hidden="true">
+                          {item.icon}
+                        </span>
+                      ) : null}
+                      <span className="admin-sidebar-label">
+                        {collapsed
+                          ? item.icon
+                            ? ""
+                            : item.shortLabel
+                          : item.label}
+                      </span>
+                    </Link>
+                  )}
                 </div>
               );
             });

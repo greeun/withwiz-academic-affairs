@@ -1,0 +1,209 @@
+// @withwiz/academic-affairs Prisma Schema Reference
+// 이 파일을 프로젝트의 schema.prisma에 복사하여 사용하세요.
+
+// ── 교직원 (Staff) ──────────────────────────
+
+model Staff {
+  id          String   @id @default(cuid())
+  name        String
+  nameEn      String?
+  role        String
+  department  String?
+  phone       String?
+  email       String?
+  photoUrl    String?
+  bio         String?  @db.Text
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── 수업시간표 (Timetable) ──────────────────
+
+model Timetable {
+  id          String   @id @default(cuid())
+  title       String
+  year        Int
+  semester    Int
+  schoolLevel String
+  fileUrl     String?
+  content     String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── 학사일정 (AcademicEvent) ────────────────
+
+model AcademicEvent {
+  id          String            @id @default(cuid())
+  title       String
+  startDate   DateTime
+  endDate     DateTime?
+  type        AcademicEventType
+  schoolLevel String?
+  description String?           @db.Text
+  isAllDay    Boolean           @default(true)
+  color       String?
+  isPublished Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+enum AcademicEventType {
+  SEMESTER_START
+  SEMESTER_END
+  EXAM
+  VACATION
+  HOLIDAY
+  EVENT
+  FIELD_TRIP
+  PARENT_MEETING
+  OTHER
+}
+
+// ── FAQ ─────────────────────────────────────
+
+model FaqCategory {
+  id        String   @id @default(cuid())
+  name      String
+  order     Int      @default(0)
+  faqs      Faq[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id          String       @id @default(cuid())
+  question    String
+  answer      String       @db.Text
+  categoryId  String?
+  category    FaqCategory? @relation(fields: [categoryId], references: [id])
+  order       Int          @default(0)
+  isPublished Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// ── 학생 (Student) ──────────────────────────
+
+model Student {
+  id          String        @id @default(cuid())
+  name        String
+  grade       Int
+  classGroup  String?
+  birthDate   DateTime?
+  phone       String?
+  parentPhone String?
+  parentName  String?
+  enrolledAt  DateTime      @default(now())
+  status      StudentStatus @default(ACTIVE)
+  notes       String?       @db.Text
+  attendances Attendance[]
+  counselings Counseling[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum StudentStatus {
+  ACTIVE
+  ON_LEAVE
+  GRADUATED
+  WITHDRAWN
+}
+
+// ── 출결 (Attendance) ───────────────────────
+
+model Attendance {
+  id        String           @id @default(cuid())
+  studentId String
+  student   Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  date      DateTime
+  status    AttendanceStatus
+  reason    String?
+  createdAt DateTime         @default(now())
+
+  @@unique([studentId, date])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EARLY_LEAVE
+  EXCUSED
+}
+
+// ── 상담 (Counseling) ───────────────────────
+
+model Counseling {
+  id          String           @id @default(cuid())
+  studentId   String?
+  student     Student?         @relation(fields: [studentId], references: [id])
+  counselorId String?
+  type        CounselingType
+  date        DateTime
+  title       String
+  content     String           @db.Text
+  parentName  String?
+  parentPhone String?
+  status      CounselingStatus @default(SCHEDULED)
+  notes       String?          @db.Text
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+enum CounselingType {
+  INITIAL
+  REGULAR
+  EMERGENCY
+  PARENT
+  ADMISSION
+}
+
+enum CounselingStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ── 입학 설명회 (Admission) ─────────────────
+
+model AdmissionSession {
+  id            String                  @id @default(cuid())
+  title         String
+  date          DateTime
+  location      String?
+  capacity      Int                     @default(30)
+  description   String?                 @db.Text
+  isOpen        Boolean                 @default(true)
+  registrations AdmissionRegistration[]
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+}
+
+model AdmissionRegistration {
+  id            String             @id @default(cuid())
+  sessionId     String
+  session       AdmissionSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  applicantName String
+  phone         String
+  email         String?
+  studentName   String
+  studentGrade  String?
+  message       String?
+  status        RegistrationStatus @default(PENDING)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@unique([sessionId, phone])
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  ATTENDED
+}

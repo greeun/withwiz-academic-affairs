@@ -1,0 +1,17 @@
+export { A as AdminShell, a as AdminShellConfig, N as NavItem } from './AdminShell-cdjjlTEo.mjs';
+export { AdminManagerBase, AdminManagerBaseHandle, AdminManagerConfig, DetailPreviewSlotProps, EditFormSlotProps, FilterSlotProps, ImageDropUpload, ListItemSlotProps, ListPreviewSlotProps, ToggleSwitch } from './components/index.mjs';
+export { useAdminForm, useAdminList, useImageDropZone } from './hooks/index.mjs';
+export { DEFAULT_LIMIT, DEFAULT_PAGE, ListParams, parseSortParam } from './services/index.mjs';
+export { A as AcademicCalendarService, a as AdmissionService, b as AttendanceService, C as CounselingService, F as FaqService, S as StaffService, c as StudentService } from './admission.service-BaG9qOh9.mjs';
+export { createAcademicCalendarHandlers, createAcademicSystem, createAdmissionHandlers, createAttendanceHandlers, createCounselingHandlers, createDashboardHandlers, createFaqHandlers, createStaffHandlers, createStudentHandlers } from './handlers/index.mjs';
+export { getPrisma, setPrisma } from './infrastructure/index.mjs';
+export { withAdminApi, withAuthApi, withCustomApi, withPublicApi } from '@withwiz/toolkit/middleware/wrappers';
+export { IApiContext, IUser, TApiHandler } from '@withwiz/toolkit/middleware/types';
+export { P as PaginatedResult, S as SortOrder, b as buildPaginatedResult } from './common-CinCPUTw.mjs';
+export { AcademicEvent, AcademicEventType, AdmissionRegistration, AdmissionSession, Attendance, AttendanceStatus, Counseling, CounselingStatus, CounselingType, Faq, FaqCategory, RegistrationStatus, Staff, Student, StudentStatus, Timetable } from './types/index.mjs';
+export { adminFetch } from './utils/admin-fetch.mjs';
+export { NextApiResponse, ResizeResult, cn, formatDate, resizeImageIfNeeded, timeAgo, validateImageSize } from './utils/index.mjs';
+export { BulkAttendanceDto, CreateAcademicEventDto, CreateAdmissionRegistrationDto, CreateAdmissionSessionDto, CreateAttendanceDto, CreateCounselingDto, CreateFaqCategoryDto, CreateFaqDto, CreateStaffDto, CreateStudentDto, CreateTimetableDto, UpdateAcademicEventDto, UpdateAdmissionRegistrationDto, UpdateAdmissionSessionDto, UpdateAttendanceDto, UpdateCounselingDto, UpdateFaqCategoryDto, UpdateFaqDto, UpdateStaffDto, UpdateStudentDto, UpdateTimetableDto, academicEventTypeEnum, attendanceStatusEnum, bulkAttendanceSchema, counselingStatusEnum, counselingTypeEnum, createAcademicEventSchema, createAdmissionRegistrationSchema, createAdmissionSessionSchema, createAttendanceSchema, createCounselingSchema, createFaqCategorySchema, createFaqSchema, createStaffSchema, createStudentSchema, createTimetableSchema, registrationStatusEnum, studentStatusEnum, updateAcademicEventSchema, updateAdmissionRegistrationSchema, updateAdmissionSessionSchema, updateAttendanceSchema, updateCounselingSchema, updateFaqCategorySchema, updateFaqSchema, updateStaffSchema, updateStudentSchema, updateTimetableSchema } from './validators/index.mjs';
+import 'react/jsx-runtime';
+import 'react';
+import 'zod';

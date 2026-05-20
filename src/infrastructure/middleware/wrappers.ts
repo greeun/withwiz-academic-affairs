@@ -3,6 +3,6 @@ export {
   withAdminApi,
   withAuthApi,
   withCustomApi,
-} from '@withwiz/toolkit/middleware/wrappers';
+} from '@withwiz/toolkit/next/middleware/wrappers';
 
-export type { IApiContext, IUser, TApiHandler } from '@withwiz/toolkit/middleware/types';
+export type { IApiContext, IUser, TApiHandler } from '@withwiz/toolkit/next/middleware/types';

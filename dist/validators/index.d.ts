@@ -473,14 +473,14 @@ declare const createAdmissionSessionSchema: z.ZodObject<{
     date: Date;
     isOpen: boolean;
     capacity: number;
-    description?: string | undefined;
     location?: string | undefined;
+    description?: string | undefined;
 }, {
     title: string;
     date: Date;
+    location?: string | undefined;
     isOpen?: boolean | undefined;
     description?: string | undefined;
-    location?: string | undefined;
     capacity?: number | undefined;
 }>;
 declare const updateAdmissionSessionSchema: z.ZodObject<{
@@ -492,17 +492,17 @@ declare const updateAdmissionSessionSchema: z.ZodObject<{
     isOpen: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
 }, "strip", z.ZodTypeAny, {
     title?: string | undefined;
+    location?: string | undefined;
     date?: Date | undefined;
     isOpen?: boolean | undefined;
     description?: string | undefined;
-    location?: string | undefined;
     capacity?: number | undefined;
 }, {
     title?: string | undefined;
+    location?: string | undefined;
     date?: Date | undefined;
     isOpen?: boolean | undefined;
     description?: string | undefined;
-    location?: string | undefined;
     capacity?: number | undefined;
 }>;
 declare const createAdmissionRegistrationSchema: z.ZodObject<{

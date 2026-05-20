@@ -5,8 +5,8 @@ export { DEFAULT_LIMIT, DEFAULT_PAGE, ListParams, parseSortParam } from './servi
 export { A as AcademicCalendarService, a as AdmissionService, b as AttendanceService, C as CounselingService, F as FaqService, S as StaffService, c as StudentService } from './admission.service-BaG9qOh9.mjs';
 export { createAcademicCalendarHandlers, createAcademicSystem, createAdmissionHandlers, createAttendanceHandlers, createCounselingHandlers, createDashboardHandlers, createFaqHandlers, createStaffHandlers, createStudentHandlers } from './handlers/index.mjs';
 export { getPrisma, setPrisma } from './infrastructure/index.mjs';
-export { withAdminApi, withAuthApi, withCustomApi, withPublicApi } from '@withwiz/toolkit/middleware/wrappers';
-export { IApiContext, IUser, TApiHandler } from '@withwiz/toolkit/middleware/types';
+export { withAdminApi, withAuthApi, withCustomApi, withPublicApi } from '@withwiz/toolkit/next/middleware/wrappers';
+export { IApiContext, IUser, TApiHandler } from '@withwiz/toolkit/next/middleware/types';
 export { P as PaginatedResult, S as SortOrder, b as buildPaginatedResult } from './common-CinCPUTw.mjs';
 export { AcademicEvent, AcademicEventType, AdmissionRegistration, AdmissionSession, Attendance, AttendanceStatus, Counseling, CounselingStatus, CounselingType, Faq, FaqCategory, RegistrationStatus, Staff, Student, StudentStatus, Timetable } from './types/index.mjs';
 export { adminFetch } from './utils/admin-fetch.mjs';

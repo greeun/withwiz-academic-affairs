@@ -35,7 +35,7 @@ import {
   withAuthApi,
   withCustomApi,
   withPublicApi
-} from "./chunk-WIPP2AW5.mjs";
+} from "./chunk-H2EA26KT.mjs";
 import "./chunk-RQZXAC67.mjs";
 import {
   createAcademicCalendarHandlers,

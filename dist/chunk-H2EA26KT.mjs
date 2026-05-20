@@ -4,7 +4,7 @@ import {
   withAdminApi,
   withAuthApi,
   withCustomApi
-} from "@withwiz/toolkit/middleware/wrappers";
+} from "@withwiz/toolkit/next/middleware/wrappers";
 
 export {
   withPublicApi,
@@ -12,4 +12,4 @@ export {
   withAuthApi,
   withCustomApi
 };
-//# sourceMappingURL=chunk-WIPP2AW5.mjs.map
+//# sourceMappingURL=chunk-H2EA26KT.mjs.map

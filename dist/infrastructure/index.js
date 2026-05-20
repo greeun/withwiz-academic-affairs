@@ -7,7 +7,7 @@ var _chunkMLXTBEWPjs = require('../chunk-MLXTBEWP.js');
 
 
 
-var _chunk3M4SBP5Yjs = require('../chunk-3M4SBP5Y.js');
+var _chunkHVPP7FDCjs = require('../chunk-HVPP7FDC.js');
 
 
 
@@ -15,5 +15,5 @@ var _chunk3M4SBP5Yjs = require('../chunk-3M4SBP5Y.js');
 
 
 
-exports.getPrisma = _chunkMLXTBEWPjs.getPrisma; exports.setPrisma = _chunkMLXTBEWPjs.setPrisma; exports.withAdminApi = _chunk3M4SBP5Yjs.withAdminApi; exports.withAuthApi = _chunk3M4SBP5Yjs.withAuthApi; exports.withCustomApi = _chunk3M4SBP5Yjs.withCustomApi; exports.withPublicApi = _chunk3M4SBP5Yjs.withPublicApi;
+exports.getPrisma = _chunkMLXTBEWPjs.getPrisma; exports.setPrisma = _chunkMLXTBEWPjs.setPrisma; exports.withAdminApi = _chunkHVPP7FDCjs.withAdminApi; exports.withAuthApi = _chunkHVPP7FDCjs.withAuthApi; exports.withCustomApi = _chunkHVPP7FDCjs.withCustomApi; exports.withPublicApi = _chunkHVPP7FDCjs.withPublicApi;
 //# sourceMappingURL=index.js.map

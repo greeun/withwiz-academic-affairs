@@ -1258,10 +1258,27 @@ packages:
 
   '@withwiz/toolkit@file:../withwiz-toolkit':
     resolution: {directory: ../withwiz-toolkit, type: directory}
+    engines: {node: '>=18'}
     peerDependencies:
+      '@radix-ui/react-select': '>=2.0.0'
+      date-fns: '>=3.0.0'
       next: '>=15.0.0'
+      nodemailer: '>=6.0.0'
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
+    peerDependenciesMeta:
+      '@radix-ui/react-select':
+        optional: true
+      date-fns:
+        optional: true
+      next:
+        optional: true
+      nodemailer:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   acorn@8.16.0:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
@@ -3520,14 +3537,15 @@ snapshots:
       clsx: 2.1.1
       jose: 6.2.3
       lucide-react: 0.562.0(react@19.2.6)
-      next: 16.2.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      react: 19.2.6
-      react-dom: 19.2.6(react@19.2.6)
       sonner: 2.0.7(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       tailwind-merge: 3.5.0
       winston: 3.19.0
       winston-daily-rotate-file: 5.0.0(winston@3.19.0)
       zod: 3.25.76
+    optionalDependencies:
+      next: 16.2.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
     transitivePeerDependencies:
       - aws-crt
 

@@ -62,4 +62,28 @@ describe('createSchoolAffairs', () => {
     });
     expect(sa.rbac.isConfigured()).toBe(true);
   });
+
+  it('exposes rbac.permissionsOf bound to prisma', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const prismaMock = { user: { findUnique: async () => null } } as any;
+    const sa = createSchoolAffairs({
+      prisma: prismaMock,
+      auth: fakeAuth,
+      rbac: { menuKeys: ['attendance'] },
+    });
+    expect(typeof sa.rbac.permissionsOf).toBe('function');
+    const result = await sa.rbac.permissionsOf('u1');
+    expect(result).toBeNull();
+  });
+
+  it('exposes rbac.withMenuApi/withAnyAdminApi/withSuperAdminApi', () => {
+    const sa = createSchoolAffairs({
+      prisma: fakePrisma,
+      auth: fakeAuth,
+      rbac: { menuKeys: ['attendance'], superAdminOnlyKeys: ['roles'] },
+    });
+    expect(typeof sa.rbac.withMenuApi).toBe('function');
+    expect(typeof sa.rbac.withAnyAdminApi).toBe('function');
+    expect(typeof sa.rbac.withSuperAdminApi).toBe('function');
+  });
 });

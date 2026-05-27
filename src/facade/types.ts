@@ -4,12 +4,16 @@ import type { IMailer } from '../infrastructure/mailer';
 import type { IObjectStorage } from '../infrastructure/storage';
 import type { IClock } from '../infrastructure/clock';
 import type { LocaleOptions } from '../types/locale';
+import type { EffectivePermissions } from '../rbac/permissions';
+import type { MenuApiBundle } from '../rbac/with-menu-api';
 
 export interface RbacConfig {
   /** Allowed menuKey values. Used for runtime validation in withMenuApi. */
   menuKeys: readonly string[];
   /** Map of route prefix → menuKey. Optional; some hosts derive at route level. */
   apiToMenu?: Record<string, string>;
+  /** menuKeys gated to system roles only. Default: empty. */
+  superAdminOnlyKeys?: readonly string[];
   /** Override the default super-admin check (Role.isSystem === true). */
   superAdminCheck?: (actor: { role?: { isSystem: boolean } }) => boolean;
 }
@@ -32,9 +36,10 @@ export interface CreateSchoolAffairsConfig {
  */
 export interface SchoolAffairs {
   readonly config: ResolvedConfig;
-  readonly rbac: {
-    /** Placeholder; concrete withMenuApi lands in S1. */
+  readonly rbac: MenuApiBundle & {
     isConfigured(): boolean;
+    /** Resolve a user's effective permissions using the host's Prisma client. */
+    permissionsOf(userId: string): Promise<EffectivePermissions | null>;
   };
 }
 

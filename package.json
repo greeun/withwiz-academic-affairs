@@ -102,6 +102,11 @@
       "types": "./dist/presets/index.d.ts",
       "import": "./dist/presets/index.mjs",
       "require": "./dist/presets/index.js"
+    },
+    "./counseling": {
+      "types": "./dist/counseling/index.d.ts",
+      "import": "./dist/counseling/index.mjs",
+      "require": "./dist/counseling/index.js"
     }
   },
   "files": [

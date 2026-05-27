@@ -6,3 +6,6 @@ export * from './infrastructure';
 export * from './types';
 export * from './utils';
 export * from './validators';
+export * from './errors';
+export * from './auth';
+export * from './facade';

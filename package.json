@@ -67,7 +67,22 @@
       "import": "./dist/validators/index.mjs",
       "require": "./dist/validators/index.js"
     },
-    "./styles/admin.css": "./dist/styles/admin.css"
+    "./styles/admin.css": "./dist/styles/admin.css",
+    "./errors": {
+      "types": "./dist/errors/index.d.ts",
+      "import": "./dist/errors/index.mjs",
+      "require": "./dist/errors/index.js"
+    },
+    "./auth": {
+      "types": "./dist/auth/index.d.ts",
+      "import": "./dist/auth/index.mjs",
+      "require": "./dist/auth/index.js"
+    },
+    "./facade": {
+      "types": "./dist/facade/index.d.ts",
+      "import": "./dist/facade/index.mjs",
+      "require": "./dist/facade/index.js"
+    }
   },
   "files": [
     "dist",

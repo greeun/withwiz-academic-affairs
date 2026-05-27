@@ -45,6 +45,7 @@ export default defineConfig({
     'presets/index': 'src/presets/index.ts',
     'counseling/index': 'src/counseling/index.ts',
     'scheduling/index': 'src/scheduling/index.ts',
+    'attendance/index': 'src/attendance/index.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,

@@ -112,6 +112,11 @@
       "types": "./dist/scheduling/index.d.ts",
       "import": "./dist/scheduling/index.mjs",
       "require": "./dist/scheduling/index.js"
+    },
+    "./attendance": {
+      "types": "./dist/attendance/index.d.ts",
+      "import": "./dist/attendance/index.mjs",
+      "require": "./dist/attendance/index.js"
     }
   },
   "files": [

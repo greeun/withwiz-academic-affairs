@@ -1,0 +1,92 @@
+// @withwiz/academic-affairs — RBAC fragment
+// Models: Role · RolePermission · UserRole · Group · UserGroup · GroupRole
+//
+// Composition rules:
+// - This fragment intentionally has NO `generator` and NO `datasource` blocks.
+//   The host's prisma/schema/_config.prisma (or main.prisma) owns those.
+// - Cross-fragment relations to host models (User) use `userId String` + the
+//   relation pointing at User; the host's User model must declare reciprocal
+//   relations (userRoles, userGroups).
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String?  @map("display_name")
+  description String?
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  userRoles   UserRole[]
+  permissions RolePermission[]
+  groupRoles  GroupRole[]
+
+  @@map("roles")
+}
+
+model RolePermission {
+  id        String   @id @default(cuid())
+  roleId    String   @map("role_id")
+  menuKey   String   @map("menu_key")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, menuKey])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  roleId    String   @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_roles")
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String?  @map("display_name")
+  description String?
+  isSystem    Boolean  @default(false) @map("is_system")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  userGroups UserGroup[]
+  groupRoles GroupRole[]
+
+  @@map("groups")
+}
+
+model UserGroup {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  groupId   String   @map("group_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+  @@map("user_groups")
+}
+
+model GroupRole {
+  id        String   @id @default(cuid())
+  groupId   String   @map("group_id")
+  roleId    String   @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  role  Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, roleId])
+  @@map("group_roles")
+}

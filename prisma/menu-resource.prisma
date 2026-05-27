@@ -1,0 +1,23 @@
+// @withwiz/academic-affairs — MenuResource fragment
+// Source of truth for admin menu metadata (label, href, group, icon, ordering).
+//
+// Composition: NO generator/datasource (host owns those).
+// menuKey doubles as a stable unique identifier (matches RolePermission.menuKey).
+
+model MenuResource {
+  id               String   @id @default(cuid())
+  menuKey          String   @unique @map("menu_key")
+  label            String
+  shortLabel       String   @map("short_label")
+  href             String
+  group            String
+  iconName         String?  @map("icon_name")
+  sortOrder        Int      @default(0) @map("sort_order")
+  isVirtual        Boolean  @default(false) @map("is_virtual")
+  isSuperAdminOnly Boolean  @default(false) @map("is_super_admin_only")
+  isHidden         Boolean  @default(false) @map("is_hidden")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("menu_resources")
+}

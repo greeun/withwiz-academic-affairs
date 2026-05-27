@@ -10,3 +10,4 @@ export * from "./class-day-plan";
 export * from "./access";
 export * from "./class-days";
 export * from "./current-staff";
+export * from "./notification-data";

@@ -9,3 +9,5 @@ export * from './validators';
 export * from './errors';
 export * from './auth';
 export * from './facade';
+export * from './rbac';
+export * from './presets';

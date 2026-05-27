@@ -82,6 +82,16 @@
       "types": "./dist/facade/index.d.ts",
       "import": "./dist/facade/index.mjs",
       "require": "./dist/facade/index.js"
+    },
+    "./rbac": {
+      "types": "./dist/rbac/index.d.ts",
+      "import": "./dist/rbac/index.mjs",
+      "require": "./dist/rbac/index.js"
+    },
+    "./presets": {
+      "types": "./dist/presets/index.d.ts",
+      "import": "./dist/presets/index.mjs",
+      "require": "./dist/presets/index.js"
     }
   },
   "files": [

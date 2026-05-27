@@ -39,6 +39,8 @@ export default defineConfig({
     'errors/index': 'src/errors/index.ts',
     'auth/index': 'src/auth/index.ts',
     'facade/index': 'src/facade/index.ts',
+    'rbac/index': 'src/rbac/index.ts',
+    'presets/index': 'src/presets/index.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,

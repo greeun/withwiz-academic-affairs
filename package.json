@@ -107,6 +107,11 @@
       "types": "./dist/counseling/index.d.ts",
       "import": "./dist/counseling/index.mjs",
       "require": "./dist/counseling/index.js"
+    },
+    "./scheduling": {
+      "types": "./dist/scheduling/index.d.ts",
+      "import": "./dist/scheduling/index.mjs",
+      "require": "./dist/scheduling/index.js"
     }
   },
   "files": [

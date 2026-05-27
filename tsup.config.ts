@@ -43,6 +43,7 @@ export default defineConfig({
     'facade/index': 'src/facade/index.ts',
     'rbac/index': 'src/rbac/index.ts',
     'presets/index': 'src/presets/index.ts',
+    'counseling/index': 'src/counseling/index.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,

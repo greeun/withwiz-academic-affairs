@@ -5,6 +5,8 @@ import type {
   SchoolAffairs,
 } from './types';
 import type { LocaleOptions } from '../types/locale';
+import { createMenuApi } from '../rbac/with-menu-api';
+import { permissionsOf } from '../rbac/permissions';
 
 const DEFAULT_LOCALE: Required<LocaleOptions> = {
   holidays: null,
@@ -41,10 +43,17 @@ export function createSchoolAffairs(
     hasStorage: Boolean(config.storage),
   };
 
+  const menuApi = createMenuApi({
+    auth: config.auth,
+    superAdminOnlyKeys: config.rbac.superAdminOnlyKeys ?? [],
+  });
+
   return {
     config: resolved,
     rbac: {
+      ...menuApi,
       isConfigured: () => menuKeys.size > 0,
+      permissionsOf: (userId: string) => permissionsOf(config.prisma, userId),
     },
   };
 }

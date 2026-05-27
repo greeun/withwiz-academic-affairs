@@ -7,3 +7,6 @@ export * from "./entry-schemas";
 export * from "./student-schemas";
 export * from "./notification-schemas";
 export * from "./class-day-plan";
+export * from "./access";
+export * from "./class-days";
+export * from "./current-staff";

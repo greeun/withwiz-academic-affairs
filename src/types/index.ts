@@ -6,3 +6,5 @@ export * from './student';
 export * from './attendance';
 export * from './counseling';
 export * from './admission';
+export * from './actor';
+export * from './locale';

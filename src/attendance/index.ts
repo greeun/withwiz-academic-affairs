@@ -6,3 +6,4 @@ export * from "./aggregate";
 export * from "./entry-schemas";
 export * from "./student-schemas";
 export * from "./notification-schemas";
+export * from "./class-day-plan";

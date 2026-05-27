@@ -62,6 +62,16 @@
       "import": "./dist/utils/admin-fetch.mjs",
       "require": "./dist/utils/admin-fetch.js"
     },
+    "./utils/academic-year": {
+      "types": "./dist/utils/academic-year.d.ts",
+      "import": "./dist/utils/academic-year.mjs",
+      "require": "./dist/utils/academic-year.js"
+    },
+    "./utils/holidays": {
+      "types": "./dist/utils/holidays.d.ts",
+      "import": "./dist/utils/holidays.mjs",
+      "require": "./dist/utils/holidays.js"
+    },
     "./validators": {
       "types": "./dist/validators/index.d.ts",
       "import": "./dist/validators/index.mjs",
@@ -108,7 +118,8 @@
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.0",
     "@tiptap/core": "^3.0.0",
-    "@tiptap/react": "^3.0.0"
+    "@tiptap/react": "^3.0.0",
+    "korean-lunar-calendar": "^0.3.6"
   },
   "peerDependencies": {
     "@withwiz/toolkit": ">=0.7.0-rc.0",

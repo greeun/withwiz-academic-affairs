@@ -17,6 +17,9 @@ importers:
       '@tiptap/react':
         specifier: ^3.0.0
         version: 3.23.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.1(@tiptap/pm@3.23.1))(@tiptap/pm@3.23.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      korean-lunar-calendar:
+        specifier: ^0.3.6
+        version: 0.3.6
       react:
         specifier: '>=18'
         version: 19.2.6
@@ -1517,6 +1520,10 @@ packages:
     peerDependenciesMeta:
       canvas:
         optional: true
+
+  korean-lunar-calendar@0.3.6:
+    resolution: {integrity: sha512-9jpZUH8ph6GsBgIGy8al6z6OfG6TdSIDB99Zj73B35ohtG12EFj3CGE5NzjBsXFiJUUjEr08/XCjfh+flXZVPw==}
+    engines: {node: '>= 16.14.0'}
 
   kuler@2.0.0:
     resolution: {integrity: sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==}
@@ -3775,6 +3782,8 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  korean-lunar-calendar@0.3.6: {}
 
   kuler@2.0.0: {}
 

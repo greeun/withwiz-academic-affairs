@@ -10,8 +10,16 @@ function getPrisma() {
   return _prisma;
 }
 
+// src/infrastructure/clock.ts
+var SystemClock = class {
+  now() {
+    return /* @__PURE__ */ new Date();
+  }
+};
 
 
 
-exports.setPrisma = setPrisma; exports.getPrisma = getPrisma;
-//# sourceMappingURL=chunk-MLXTBEWP.js.map
+
+
+exports.setPrisma = setPrisma; exports.getPrisma = getPrisma; exports.SystemClock = SystemClock;
+//# sourceMappingURL=chunk-PSJAXPGE.js.map

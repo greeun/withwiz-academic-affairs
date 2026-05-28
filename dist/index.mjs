@@ -1,10 +1,28 @@
-import "./chunk-66N67LZR.mjs";
+import {
+  createSchoolAffairs
+} from "./chunk-5MEAO4RA.mjs";
+import "./chunk-MGBP2Z6J.mjs";
+import {
+  createMenuApi
+} from "./chunk-QKXG62LN.mjs";
+import {
+  STANDARD_SCHOOL_ROLES
+} from "./chunk-2NGCPKLV.mjs";
+import {
+  permissionsOf
+} from "./chunk-PKLKFT73.mjs";
+import "./chunk-4JRVOD5W.mjs";
 import {
   cn,
   formatDate,
   timeAgo
 } from "./chunk-OXW2B2Q3.mjs";
 import "./chunk-DCFKV7OR.mjs";
+import "./chunk-H43BUZKY.mjs";
+import {
+  AcademicAffairsError
+} from "./chunk-QIK4YES6.mjs";
+import "./chunk-GWQMMN7I.mjs";
 import {
   AdminManagerBase,
   ImageDropUpload,
@@ -27,9 +45,10 @@ import {
   adminFetch
 } from "./chunk-L55N6LYP.mjs";
 import {
+  SystemClock,
   getPrisma,
   setPrisma
-} from "./chunk-NQECOL37.mjs";
+} from "./chunk-U75OUXOP.mjs";
 import {
   withAdminApi,
   withAuthApi,
@@ -96,6 +115,7 @@ import {
   buildPaginatedResult
 } from "./chunk-5U4CAFCL.mjs";
 export {
+  AcademicAffairsError,
   AcademicCalendarService,
   AdminManagerBase,
   AdminShell,
@@ -107,8 +127,10 @@ export {
   FaqService,
   ImageDropUpload,
   NextApiResponse,
+  STANDARD_SCHOOL_ROLES,
   StaffService,
   StudentService,
+  SystemClock,
   ToggleSwitch,
   academicEventTypeEnum,
   adminFetch,
@@ -132,6 +154,8 @@ export {
   createFaqCategorySchema,
   createFaqHandlers,
   createFaqSchema,
+  createMenuApi,
+  createSchoolAffairs,
   createStaffHandlers,
   createStaffSchema,
   createStudentHandlers,
@@ -140,6 +164,7 @@ export {
   formatDate,
   getPrisma,
   parseSortParam,
+  permissionsOf,
   registrationStatusEnum,
   resizeImageIfNeeded,
   setPrisma,

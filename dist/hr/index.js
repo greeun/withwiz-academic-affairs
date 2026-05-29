@@ -63,6 +63,49 @@ var listEmployeeQuerySchema = _zod.z.object({
   sort: _zod.z.enum(["sortOrder", "name", "hireDate", "createdAt"]).default("sortOrder"),
   order: _zod.z.enum(["asc", "desc"]).default("asc")
 });
+var careerTypeEnum = _zod.z.enum(["EDUCATIONAL", "NON_EDUCATIONAL"]);
+var qualificationTypeEnum = _zod.z.enum(["TEACHER_LICENSE", "GENERAL"]);
+var createEducationSchema = _zod.z.object({
+  schoolName: _zod.z.string().min(1).max(120),
+  major: _zod.z.string().max(120).nullable().optional(),
+  degree: _zod.z.string().max(60).nullable().optional(),
+  admissionDate: dateString.nullable().optional(),
+  graduationDate: dateString.nullable().optional(),
+  graduationType: _zod.z.string().max(40).nullable().optional(),
+  sortOrder: _zod.z.coerce.number().int().optional()
+});
+var updateEducationSchema = createEducationSchema.partial();
+var createCareerSchema = _zod.z.object({
+  orgName: _zod.z.string().min(1).max(160),
+  position: _zod.z.string().max(80).nullable().optional(),
+  duties: _zod.z.string().max(2e3).nullable().optional(),
+  startDate: dateString,
+  endDate: dateString.nullable().optional(),
+  careerType: careerTypeEnum.default("NON_EDUCATIONAL"),
+  isVerified: _zod.z.boolean().default(false),
+  convertedMonths: _zod.z.coerce.number().int().min(0).nullable().optional(),
+  sortOrder: _zod.z.coerce.number().int().optional()
+});
+var updateCareerSchema = createCareerSchema.partial();
+var createFamilySchema = _zod.z.object({
+  relation: _zod.z.string().min(1).max(40),
+  name: _zod.z.string().min(1).max(60),
+  birthDate: dateString.nullable().optional(),
+  occupation: _zod.z.string().max(80).nullable().optional(),
+  cohabiting: _zod.z.boolean().default(false),
+  sortOrder: _zod.z.coerce.number().int().optional()
+});
+var updateFamilySchema = createFamilySchema.partial();
+var createQualificationSchema = _zod.z.object({
+  type: qualificationTypeEnum.default("GENERAL"),
+  name: _zod.z.string().min(1).max(120),
+  grade: _zod.z.string().max(40).nullable().optional(),
+  issuer: _zod.z.string().max(120).nullable().optional(),
+  certNo: _zod.z.string().max(80).nullable().optional(),
+  issueDate: dateString.nullable().optional(),
+  sortOrder: _zod.z.coerce.number().int().optional()
+});
+var updateQualificationSchema = createQualificationSchema.partial();
 
 // src/hr/viewer.ts
 async function getHrViewer(prisma, userId) {
@@ -103,5 +146,15 @@ async function getHrViewer(prisma, userId) {
 
 
 
-exports.canEdit = canEdit; exports.canManagePii = canManagePii; exports.canReadAll = canReadAll; exports.createEmployeeSchema = createEmployeeSchema; exports.employeeStatusEnum = employeeStatusEnum; exports.employmentTypeEnum = employmentTypeEnum; exports.getHrViewer = getHrViewer; exports.listEmployeeQuerySchema = listEmployeeQuerySchema; exports.scopeWhere = scopeWhere; exports.updateEmployeeSchema = updateEmployeeSchema;
+
+
+
+
+
+
+
+
+
+
+exports.canEdit = canEdit; exports.canManagePii = canManagePii; exports.canReadAll = canReadAll; exports.careerTypeEnum = careerTypeEnum; exports.createCareerSchema = createCareerSchema; exports.createEducationSchema = createEducationSchema; exports.createEmployeeSchema = createEmployeeSchema; exports.createFamilySchema = createFamilySchema; exports.createQualificationSchema = createQualificationSchema; exports.employeeStatusEnum = employeeStatusEnum; exports.employmentTypeEnum = employmentTypeEnum; exports.getHrViewer = getHrViewer; exports.listEmployeeQuerySchema = listEmployeeQuerySchema; exports.qualificationTypeEnum = qualificationTypeEnum; exports.scopeWhere = scopeWhere; exports.updateCareerSchema = updateCareerSchema; exports.updateEducationSchema = updateEducationSchema; exports.updateEmployeeSchema = updateEmployeeSchema; exports.updateFamilySchema = updateFamilySchema; exports.updateQualificationSchema = updateQualificationSchema;
 //# sourceMappingURL=index.js.map

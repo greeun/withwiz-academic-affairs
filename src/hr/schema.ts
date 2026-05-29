@@ -58,3 +58,58 @@ export const listEmployeeQuerySchema = z.object({
 export type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>;
 export type UpdateEmployeeInput = z.infer<typeof updateEmployeeSchema>;
 export type ListEmployeeQuery = z.infer<typeof listEmployeeQuerySchema>;
+
+// ─── 하위 도메인: 학력 / 경력 / 가족 / 자격 ───────────────────────────────
+
+export const careerTypeEnum = z.enum(["EDUCATIONAL", "NON_EDUCATIONAL"]);
+export const qualificationTypeEnum = z.enum(["TEACHER_LICENSE", "GENERAL"]);
+
+export const createEducationSchema = z.object({
+  schoolName: z.string().min(1).max(120),
+  major: z.string().max(120).nullable().optional(),
+  degree: z.string().max(60).nullable().optional(),
+  admissionDate: dateString.nullable().optional(),
+  graduationDate: dateString.nullable().optional(),
+  graduationType: z.string().max(40).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateEducationSchema = createEducationSchema.partial();
+
+export const createCareerSchema = z.object({
+  orgName: z.string().min(1).max(160),
+  position: z.string().max(80).nullable().optional(),
+  duties: z.string().max(2000).nullable().optional(),
+  startDate: dateString,
+  endDate: dateString.nullable().optional(),
+  careerType: careerTypeEnum.default("NON_EDUCATIONAL"),
+  isVerified: z.boolean().default(false),
+  convertedMonths: z.coerce.number().int().min(0).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateCareerSchema = createCareerSchema.partial();
+
+export const createFamilySchema = z.object({
+  relation: z.string().min(1).max(40),
+  name: z.string().min(1).max(60),
+  birthDate: dateString.nullable().optional(),
+  occupation: z.string().max(80).nullable().optional(),
+  cohabiting: z.boolean().default(false),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateFamilySchema = createFamilySchema.partial();
+
+export const createQualificationSchema = z.object({
+  type: qualificationTypeEnum.default("GENERAL"),
+  name: z.string().min(1).max(120),
+  grade: z.string().max(40).nullable().optional(),
+  issuer: z.string().max(120).nullable().optional(),
+  certNo: z.string().max(80).nullable().optional(),
+  issueDate: dateString.nullable().optional(),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateQualificationSchema = createQualificationSchema.partial();
+
+export type CreateEducationInput = z.infer<typeof createEducationSchema>;
+export type CreateCareerInput = z.infer<typeof createCareerSchema>;
+export type CreateFamilyInput = z.infer<typeof createFamilySchema>;
+export type CreateQualificationInput = z.infer<typeof createQualificationSchema>;

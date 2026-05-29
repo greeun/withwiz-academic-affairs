@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { createEmployeeSchema, updateEmployeeSchema, listEmployeeQuerySchema } from "../../../src/hr/schema";
+import {
+  createEducationSchema, createCareerSchema, createFamilySchema, createQualificationSchema,
+} from "../../../src/hr/schema";
 
 describe("hr/schema createEmployeeSchema", () => {
   it("이름만으로 통과(나머지 옵션), 기본 enum 적용", () => {
@@ -47,5 +50,28 @@ describe("hr/schema listEmployeeQuerySchema", () => {
   it("status 필터 enum 검증", () => {
     expect(listEmployeeQuerySchema.safeParse({ status: "ACTIVE" }).success).toBe(true);
     expect(listEmployeeQuerySchema.safeParse({ status: "GONE" }).success).toBe(false);
+  });
+});
+
+describe("hr/schema 하위 도메인", () => {
+  it("education: schoolName 필수, 날짜 형식", () => {
+    expect(createEducationSchema.safeParse({ schoolName: "서울대" }).success).toBe(true);
+    expect(createEducationSchema.safeParse({}).success).toBe(false);
+    expect(createEducationSchema.safeParse({ schoolName: "A", admissionDate: "2020/01/01" }).success).toBe(false);
+  });
+  it("career: orgName+startDate 필수, careerType 기본 NON_EDUCATIONAL, isVerified 기본 false", () => {
+    const r = createCareerSchema.parse({ orgName: "A초", startDate: "2020-03-01" });
+    expect(r.careerType).toBe("NON_EDUCATIONAL");
+    expect(r.isVerified).toBe(false);
+    expect(createCareerSchema.safeParse({ orgName: "A" }).success).toBe(false);
+    expect(createCareerSchema.safeParse({ orgName: "A", startDate: "2020-03-01", careerType: "X" }).success).toBe(false);
+  });
+  it("family: relation+name 필수", () => {
+    expect(createFamilySchema.safeParse({ relation: "부", name: "홍부" }).success).toBe(true);
+    expect(createFamilySchema.safeParse({ relation: "부" }).success).toBe(false);
+  });
+  it("qualification: name 필수, type 기본 GENERAL", () => {
+    expect(createQualificationSchema.parse({ name: "정교사2급" }).type).toBe("GENERAL");
+    expect(createQualificationSchema.safeParse({}).success).toBe(false);
   });
 });

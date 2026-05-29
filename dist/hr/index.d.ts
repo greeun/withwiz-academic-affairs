@@ -130,6 +130,104 @@ declare const listEmployeeQuerySchema: z.ZodObject<{
 type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>;
 type UpdateEmployeeInput = z.infer<typeof updateEmployeeSchema>;
 type ListEmployeeQuery = z.infer<typeof listEmployeeQuerySchema>;
+declare const careerTypeEnum: z.ZodEnum<{
+    EDUCATIONAL: "EDUCATIONAL";
+    NON_EDUCATIONAL: "NON_EDUCATIONAL";
+}>;
+declare const qualificationTypeEnum: z.ZodEnum<{
+    TEACHER_LICENSE: "TEACHER_LICENSE";
+    GENERAL: "GENERAL";
+}>;
+declare const createEducationSchema: z.ZodObject<{
+    schoolName: z.ZodString;
+    major: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    degree: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    admissionDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    graduationDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    graduationType: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateEducationSchema: z.ZodObject<{
+    schoolName: z.ZodOptional<z.ZodString>;
+    major: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    degree: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    admissionDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    graduationDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    graduationType: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+declare const createCareerSchema: z.ZodObject<{
+    orgName: z.ZodString;
+    position: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    duties: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    startDate: z.ZodString;
+    endDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    careerType: z.ZodDefault<z.ZodEnum<{
+        EDUCATIONAL: "EDUCATIONAL";
+        NON_EDUCATIONAL: "NON_EDUCATIONAL";
+    }>>;
+    isVerified: z.ZodDefault<z.ZodBoolean>;
+    convertedMonths: z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateCareerSchema: z.ZodObject<{
+    orgName: z.ZodOptional<z.ZodString>;
+    position: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    duties: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    startDate: z.ZodOptional<z.ZodString>;
+    endDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    careerType: z.ZodOptional<z.ZodDefault<z.ZodEnum<{
+        EDUCATIONAL: "EDUCATIONAL";
+        NON_EDUCATIONAL: "NON_EDUCATIONAL";
+    }>>>;
+    isVerified: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    convertedMonths: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+declare const createFamilySchema: z.ZodObject<{
+    relation: z.ZodString;
+    name: z.ZodString;
+    birthDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    occupation: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    cohabiting: z.ZodDefault<z.ZodBoolean>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateFamilySchema: z.ZodObject<{
+    relation: z.ZodOptional<z.ZodString>;
+    name: z.ZodOptional<z.ZodString>;
+    birthDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    occupation: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    cohabiting: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+declare const createQualificationSchema: z.ZodObject<{
+    type: z.ZodDefault<z.ZodEnum<{
+        TEACHER_LICENSE: "TEACHER_LICENSE";
+        GENERAL: "GENERAL";
+    }>>;
+    name: z.ZodString;
+    grade: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    issuer: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    certNo: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    issueDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateQualificationSchema: z.ZodObject<{
+    type: z.ZodOptional<z.ZodDefault<z.ZodEnum<{
+        TEACHER_LICENSE: "TEACHER_LICENSE";
+        GENERAL: "GENERAL";
+    }>>>;
+    name: z.ZodOptional<z.ZodString>;
+    grade: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    issuer: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    certNo: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    issueDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+type CreateEducationInput = z.infer<typeof createEducationSchema>;
+type CreateCareerInput = z.infer<typeof createCareerSchema>;
+type CreateFamilyInput = z.infer<typeof createFamilySchema>;
+type CreateQualificationInput = z.infer<typeof createQualificationSchema>;
 
 /**
  * 로그인 사용자의 인사 viewer(staff 식별 + 권한)를 해석한다.
@@ -138,4 +236,4 @@ type ListEmployeeQuery = z.infer<typeof listEmployeeQuerySchema>;
  */
 declare function getHrViewer(prisma: any, userId: string): Promise<HrViewer | null>;
 
-export { type CreateEmployeeInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, canEdit, canManagePii, canReadAll, createEmployeeSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, listEmployeeQuerySchema, scopeWhere, updateEmployeeSchema };
+export { type CreateCareerInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateQualificationInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, canEdit, canManagePii, canReadAll, careerTypeEnum, createCareerSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createQualificationSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateCareerSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateQualificationSchema };

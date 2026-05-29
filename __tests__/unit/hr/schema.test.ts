@@ -3,6 +3,9 @@ import { createEmployeeSchema, updateEmployeeSchema, listEmployeeQuerySchema } f
 import {
   createEducationSchema, createCareerSchema, createFamilySchema, createQualificationSchema,
 } from "../../../src/hr/schema";
+import {
+  createContractSchema, createAppointmentSchema,
+} from "../../../src/hr/schema";
 
 describe("hr/schema createEmployeeSchema", () => {
   it("이름만으로 통과(나머지 옵션), 기본 enum 적용", () => {
@@ -73,5 +76,19 @@ describe("hr/schema 하위 도메인", () => {
   it("qualification: name 필수, type 기본 GENERAL", () => {
     expect(createQualificationSchema.parse({ name: "정교사2급" }).type).toBe("GENERAL");
     expect(createQualificationSchema.safeParse({}).success).toBe(false);
+  });
+});
+
+describe("hr/schema 임용·계약·발령", () => {
+  it("contract: contractType+startDate 필수, salaryStep 정수 허용", () => {
+    expect(createContractSchema.safeParse({ contractType: "REGULAR", startDate: "2026-03-01" }).success).toBe(true);
+    expect(createContractSchema.safeParse({ contractType: "REGULAR" }).success).toBe(false);
+    expect(createContractSchema.safeParse({ contractType: "X", startDate: "2026-03-01" }).success).toBe(false);
+    expect(createContractSchema.safeParse({ contractType: "REGULAR", startDate: "2026-03-01", salaryStep: 5 }).success).toBe(true);
+  });
+  it("appointment: type+effectiveDate 필수, 잘못된 type 거부", () => {
+    expect(createAppointmentSchema.safeParse({ type: "DISMISSAL", effectiveDate: "2026-08-31" }).success).toBe(true);
+    expect(createAppointmentSchema.safeParse({ type: "NEW_HIRE" }).success).toBe(false);
+    expect(createAppointmentSchema.safeParse({ type: "NOPE", effectiveDate: "2026-08-31" }).success).toBe(false);
   });
 });

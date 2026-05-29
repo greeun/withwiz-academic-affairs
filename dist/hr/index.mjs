@@ -106,6 +106,36 @@ var createQualificationSchema = z.object({
   sortOrder: z.coerce.number().int().optional()
 });
 var updateQualificationSchema = createQualificationSchema.partial();
+var appointmentTypeEnum = z.enum([
+  "NEW_HIRE",
+  "TRANSFER",
+  "PROMOTION",
+  "POSITION_CHANGE",
+  "LEAVE",
+  "REINSTATE",
+  "DISMISSAL"
+]);
+var createContractSchema = z.object({
+  contractType: employmentTypeEnum,
+  startDate: dateString,
+  endDate: dateString.nullable().optional(),
+  jobTitle: z.string().max(80).nullable().optional(),
+  salaryStep: z.coerce.number().int().min(0).nullable().optional(),
+  salaryStepDeterminedAt: dateString.nullable().optional(),
+  renewalOfId: z.string().nullable().optional(),
+  notes: z.string().max(2e3).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional()
+});
+var updateContractSchema = createContractSchema.partial();
+var createAppointmentSchema = z.object({
+  type: appointmentTypeEnum,
+  effectiveDate: dateString,
+  positionTitle: z.string().max(80).nullable().optional(),
+  assignment: z.string().max(120).nullable().optional(),
+  reason: z.string().max(2e3).nullable().optional(),
+  docNo: z.string().max(80).nullable().optional()
+});
+var updateAppointmentSchema = createAppointmentSchema.partial();
 
 // src/hr/viewer.ts
 async function getHrViewer(prisma, userId) {
@@ -136,11 +166,14 @@ async function getHrViewer(prisma, userId) {
   return { staffId: user.staff.id, menuKeys, isSystem };
 }
 export {
+  appointmentTypeEnum,
   canEdit,
   canManagePii,
   canReadAll,
   careerTypeEnum,
+  createAppointmentSchema,
   createCareerSchema,
+  createContractSchema,
   createEducationSchema,
   createEmployeeSchema,
   createFamilySchema,
@@ -151,7 +184,9 @@ export {
   listEmployeeQuerySchema,
   qualificationTypeEnum,
   scopeWhere,
+  updateAppointmentSchema,
   updateCareerSchema,
+  updateContractSchema,
   updateEducationSchema,
   updateEmployeeSchema,
   updateFamilySchema,

@@ -228,6 +228,81 @@ type CreateEducationInput = z.infer<typeof createEducationSchema>;
 type CreateCareerInput = z.infer<typeof createCareerSchema>;
 type CreateFamilyInput = z.infer<typeof createFamilySchema>;
 type CreateQualificationInput = z.infer<typeof createQualificationSchema>;
+declare const appointmentTypeEnum: z.ZodEnum<{
+    NEW_HIRE: "NEW_HIRE";
+    TRANSFER: "TRANSFER";
+    PROMOTION: "PROMOTION";
+    POSITION_CHANGE: "POSITION_CHANGE";
+    LEAVE: "LEAVE";
+    REINSTATE: "REINSTATE";
+    DISMISSAL: "DISMISSAL";
+}>;
+declare const createContractSchema: z.ZodObject<{
+    contractType: z.ZodEnum<{
+        REGULAR: "REGULAR";
+        CONTRACT: "CONTRACT";
+        PART_TIME: "PART_TIME";
+        DISPATCH: "DISPATCH";
+    }>;
+    startDate: z.ZodString;
+    endDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    jobTitle: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    salaryStep: z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>;
+    salaryStepDeterminedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    renewalOfId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    notes: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateContractSchema: z.ZodObject<{
+    contractType: z.ZodOptional<z.ZodEnum<{
+        REGULAR: "REGULAR";
+        CONTRACT: "CONTRACT";
+        PART_TIME: "PART_TIME";
+        DISPATCH: "DISPATCH";
+    }>>;
+    startDate: z.ZodOptional<z.ZodString>;
+    endDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    jobTitle: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    salaryStep: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>>;
+    salaryStepDeterminedAt: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    renewalOfId: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    notes: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+declare const createAppointmentSchema: z.ZodObject<{
+    type: z.ZodEnum<{
+        NEW_HIRE: "NEW_HIRE";
+        TRANSFER: "TRANSFER";
+        PROMOTION: "PROMOTION";
+        POSITION_CHANGE: "POSITION_CHANGE";
+        LEAVE: "LEAVE";
+        REINSTATE: "REINSTATE";
+        DISMISSAL: "DISMISSAL";
+    }>;
+    effectiveDate: z.ZodString;
+    positionTitle: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    assignment: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    reason: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    docNo: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.core.$strip>;
+declare const updateAppointmentSchema: z.ZodObject<{
+    type: z.ZodOptional<z.ZodEnum<{
+        NEW_HIRE: "NEW_HIRE";
+        TRANSFER: "TRANSFER";
+        PROMOTION: "PROMOTION";
+        POSITION_CHANGE: "POSITION_CHANGE";
+        LEAVE: "LEAVE";
+        REINSTATE: "REINSTATE";
+        DISMISSAL: "DISMISSAL";
+    }>>;
+    effectiveDate: z.ZodOptional<z.ZodString>;
+    positionTitle: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    assignment: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    reason: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    docNo: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+}, z.core.$strip>;
+type CreateContractInput = z.infer<typeof createContractSchema>;
+type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
 
 /**
  * 로그인 사용자의 인사 viewer(staff 식별 + 권한)를 해석한다.
@@ -236,4 +311,4 @@ type CreateQualificationInput = z.infer<typeof createQualificationSchema>;
  */
 declare function getHrViewer(prisma: any, userId: string): Promise<HrViewer | null>;
 
-export { type CreateCareerInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateQualificationInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, canEdit, canManagePii, canReadAll, careerTypeEnum, createCareerSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createQualificationSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateCareerSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateQualificationSchema };
+export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateQualificationInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createQualificationSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateQualificationSchema };

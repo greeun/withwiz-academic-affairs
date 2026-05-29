@@ -108,6 +108,11 @@
       "import": "./dist/counseling/index.mjs",
       "require": "./dist/counseling/index.js"
     },
+    "./hr": {
+      "types": "./dist/hr/index.d.ts",
+      "import": "./dist/hr/index.mjs",
+      "require": "./dist/hr/index.js"
+    },
     "./scheduling": {
       "types": "./dist/scheduling/index.d.ts",
       "import": "./dist/scheduling/index.mjs",

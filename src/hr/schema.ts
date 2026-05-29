@@ -113,3 +113,35 @@ export type CreateEducationInput = z.infer<typeof createEducationSchema>;
 export type CreateCareerInput = z.infer<typeof createCareerSchema>;
 export type CreateFamilyInput = z.infer<typeof createFamilySchema>;
 export type CreateQualificationInput = z.infer<typeof createQualificationSchema>;
+
+// ─── 하위 도메인: 근로계약 / 발령 ────────────────────────────────────────────
+
+export const appointmentTypeEnum = z.enum([
+  "NEW_HIRE", "TRANSFER", "PROMOTION", "POSITION_CHANGE", "LEAVE", "REINSTATE", "DISMISSAL",
+]);
+
+export const createContractSchema = z.object({
+  contractType: employmentTypeEnum,
+  startDate: dateString,
+  endDate: dateString.nullable().optional(),
+  jobTitle: z.string().max(80).nullable().optional(),
+  salaryStep: z.coerce.number().int().min(0).nullable().optional(),
+  salaryStepDeterminedAt: dateString.nullable().optional(),
+  renewalOfId: z.string().nullable().optional(),
+  notes: z.string().max(2000).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateContractSchema = createContractSchema.partial();
+
+export const createAppointmentSchema = z.object({
+  type: appointmentTypeEnum,
+  effectiveDate: dateString,
+  positionTitle: z.string().max(80).nullable().optional(),
+  assignment: z.string().max(120).nullable().optional(),
+  reason: z.string().max(2000).nullable().optional(),
+  docNo: z.string().max(80).nullable().optional(),
+});
+export const updateAppointmentSchema = createAppointmentSchema.partial();
+
+export type CreateContractInput = z.infer<typeof createContractSchema>;
+export type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;

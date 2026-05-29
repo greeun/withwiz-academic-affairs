@@ -92,3 +92,19 @@ describe("hr/schema 임용·계약·발령", () => {
     expect(createAppointmentSchema.safeParse({ type: "NOPE", effectiveDate: "2026-08-31" }).success).toBe(false);
   });
 });
+
+import { createLeaveSchema, createLeaveBalanceSchema } from "../../../src/hr/schema";
+describe("hr/schema 근태·휴가", () => {
+  it("leave: type+startDate+endDate+days 필수, status 기본 REQUESTED, 반차 0.5", () => {
+    const r = createLeaveSchema.parse({ type: "ANNUAL", startDate: "2026-06-01", endDate: "2026-06-02", days: 2 });
+    expect(r.status).toBe("REQUESTED");
+    expect(createLeaveSchema.safeParse({ type: "ANNUAL", startDate: "2026-06-01" }).success).toBe(false);
+    expect(createLeaveSchema.safeParse({ type: "X", startDate: "2026-06-01", endDate: "2026-06-02", days: 1 }).success).toBe(false);
+    expect(createLeaveSchema.safeParse({ type: "ANNUAL", startDate: "2026-06-01", endDate: "2026-06-01", days: 0.5 }).success).toBe(true);
+  });
+  it("leaveBalance: year+entitledDays 필수, type 기본 ANNUAL", () => {
+    const r = createLeaveBalanceSchema.parse({ year: 2026, entitledDays: 15 });
+    expect(r.type).toBe("ANNUAL");
+    expect(createLeaveBalanceSchema.safeParse({ entitledDays: 15 }).success).toBe(false);
+  });
+});

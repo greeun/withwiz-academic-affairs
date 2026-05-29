@@ -145,3 +145,38 @@ export const updateAppointmentSchema = createAppointmentSchema.partial();
 
 export type CreateContractInput = z.infer<typeof createContractSchema>;
 export type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
+
+// ─── 하위 도메인: 휴가신청 / 연차잔여 ────────────────────────────────────────────
+
+export const leaveTypeEnum = z.enum(["ANNUAL", "SICK", "OFFICIAL", "FAMILY_EVENT", "BUSINESS_TRIP", "OTHER"]);
+export const leaveStatusEnum = z.enum(["REQUESTED", "APPROVED", "REJECTED", "CANCELED"]);
+
+export const createLeaveSchema = z.object({
+  type: leaveTypeEnum,
+  startDate: dateString,
+  endDate: dateString,
+  days: z.coerce.number().min(0).max(366),
+  reason: z.string().max(2000).nullable().optional(),
+  status: leaveStatusEnum.default("REQUESTED"),
+});
+export const updateLeaveSchema = z.object({
+  type: leaveTypeEnum.optional(),
+  startDate: dateString.optional(),
+  endDate: dateString.optional(),
+  days: z.coerce.number().min(0).max(366).optional(),
+  reason: z.string().max(2000).nullable().optional(),
+  status: leaveStatusEnum.optional(),
+  rejectReason: z.string().max(2000).nullable().optional(),
+});
+
+export const createLeaveBalanceSchema = z.object({
+  year: z.coerce.number().int().min(2000).max(2100),
+  type: leaveTypeEnum.default("ANNUAL"),
+  entitledDays: z.coerce.number().min(0).max(366),
+});
+export const updateLeaveBalanceSchema = z.object({
+  entitledDays: z.coerce.number().min(0).max(366).optional(),
+});
+
+export type CreateLeaveInput = z.infer<typeof createLeaveSchema>;
+export type CreateLeaveBalanceInput = z.infer<typeof createLeaveBalanceSchema>;

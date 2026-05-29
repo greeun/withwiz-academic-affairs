@@ -136,6 +136,33 @@ var createAppointmentSchema = z.object({
   docNo: z.string().max(80).nullable().optional()
 });
 var updateAppointmentSchema = createAppointmentSchema.partial();
+var leaveTypeEnum = z.enum(["ANNUAL", "SICK", "OFFICIAL", "FAMILY_EVENT", "BUSINESS_TRIP", "OTHER"]);
+var leaveStatusEnum = z.enum(["REQUESTED", "APPROVED", "REJECTED", "CANCELED"]);
+var createLeaveSchema = z.object({
+  type: leaveTypeEnum,
+  startDate: dateString,
+  endDate: dateString,
+  days: z.coerce.number().min(0).max(366),
+  reason: z.string().max(2e3).nullable().optional(),
+  status: leaveStatusEnum.default("REQUESTED")
+});
+var updateLeaveSchema = z.object({
+  type: leaveTypeEnum.optional(),
+  startDate: dateString.optional(),
+  endDate: dateString.optional(),
+  days: z.coerce.number().min(0).max(366).optional(),
+  reason: z.string().max(2e3).nullable().optional(),
+  status: leaveStatusEnum.optional(),
+  rejectReason: z.string().max(2e3).nullable().optional()
+});
+var createLeaveBalanceSchema = z.object({
+  year: z.coerce.number().int().min(2e3).max(2100),
+  type: leaveTypeEnum.default("ANNUAL"),
+  entitledDays: z.coerce.number().min(0).max(366)
+});
+var updateLeaveBalanceSchema = z.object({
+  entitledDays: z.coerce.number().min(0).max(366).optional()
+});
 
 // src/hr/viewer.ts
 async function getHrViewer(prisma, userId) {
@@ -177,10 +204,14 @@ export {
   createEducationSchema,
   createEmployeeSchema,
   createFamilySchema,
+  createLeaveBalanceSchema,
+  createLeaveSchema,
   createQualificationSchema,
   employeeStatusEnum,
   employmentTypeEnum,
   getHrViewer,
+  leaveStatusEnum,
+  leaveTypeEnum,
   listEmployeeQuerySchema,
   qualificationTypeEnum,
   scopeWhere,
@@ -190,6 +221,8 @@ export {
   updateEducationSchema,
   updateEmployeeSchema,
   updateFamilySchema,
+  updateLeaveBalanceSchema,
+  updateLeaveSchema,
   updateQualificationSchema
 };
 //# sourceMappingURL=index.mjs.map

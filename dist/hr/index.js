@@ -136,6 +136,33 @@ var createAppointmentSchema = _zod.z.object({
   docNo: _zod.z.string().max(80).nullable().optional()
 });
 var updateAppointmentSchema = createAppointmentSchema.partial();
+var leaveTypeEnum = _zod.z.enum(["ANNUAL", "SICK", "OFFICIAL", "FAMILY_EVENT", "BUSINESS_TRIP", "OTHER"]);
+var leaveStatusEnum = _zod.z.enum(["REQUESTED", "APPROVED", "REJECTED", "CANCELED"]);
+var createLeaveSchema = _zod.z.object({
+  type: leaveTypeEnum,
+  startDate: dateString,
+  endDate: dateString,
+  days: _zod.z.coerce.number().min(0).max(366),
+  reason: _zod.z.string().max(2e3).nullable().optional(),
+  status: leaveStatusEnum.default("REQUESTED")
+});
+var updateLeaveSchema = _zod.z.object({
+  type: leaveTypeEnum.optional(),
+  startDate: dateString.optional(),
+  endDate: dateString.optional(),
+  days: _zod.z.coerce.number().min(0).max(366).optional(),
+  reason: _zod.z.string().max(2e3).nullable().optional(),
+  status: leaveStatusEnum.optional(),
+  rejectReason: _zod.z.string().max(2e3).nullable().optional()
+});
+var createLeaveBalanceSchema = _zod.z.object({
+  year: _zod.z.coerce.number().int().min(2e3).max(2100),
+  type: leaveTypeEnum.default("ANNUAL"),
+  entitledDays: _zod.z.coerce.number().min(0).max(366)
+});
+var updateLeaveBalanceSchema = _zod.z.object({
+  entitledDays: _zod.z.coerce.number().min(0).max(366).optional()
+});
 
 // src/hr/viewer.ts
 async function getHrViewer(prisma, userId) {
@@ -191,5 +218,11 @@ async function getHrViewer(prisma, userId) {
 
 
 
-exports.appointmentTypeEnum = appointmentTypeEnum; exports.canEdit = canEdit; exports.canManagePii = canManagePii; exports.canReadAll = canReadAll; exports.careerTypeEnum = careerTypeEnum; exports.createAppointmentSchema = createAppointmentSchema; exports.createCareerSchema = createCareerSchema; exports.createContractSchema = createContractSchema; exports.createEducationSchema = createEducationSchema; exports.createEmployeeSchema = createEmployeeSchema; exports.createFamilySchema = createFamilySchema; exports.createQualificationSchema = createQualificationSchema; exports.employeeStatusEnum = employeeStatusEnum; exports.employmentTypeEnum = employmentTypeEnum; exports.getHrViewer = getHrViewer; exports.listEmployeeQuerySchema = listEmployeeQuerySchema; exports.qualificationTypeEnum = qualificationTypeEnum; exports.scopeWhere = scopeWhere; exports.updateAppointmentSchema = updateAppointmentSchema; exports.updateCareerSchema = updateCareerSchema; exports.updateContractSchema = updateContractSchema; exports.updateEducationSchema = updateEducationSchema; exports.updateEmployeeSchema = updateEmployeeSchema; exports.updateFamilySchema = updateFamilySchema; exports.updateQualificationSchema = updateQualificationSchema;
+
+
+
+
+
+
+exports.appointmentTypeEnum = appointmentTypeEnum; exports.canEdit = canEdit; exports.canManagePii = canManagePii; exports.canReadAll = canReadAll; exports.careerTypeEnum = careerTypeEnum; exports.createAppointmentSchema = createAppointmentSchema; exports.createCareerSchema = createCareerSchema; exports.createContractSchema = createContractSchema; exports.createEducationSchema = createEducationSchema; exports.createEmployeeSchema = createEmployeeSchema; exports.createFamilySchema = createFamilySchema; exports.createLeaveBalanceSchema = createLeaveBalanceSchema; exports.createLeaveSchema = createLeaveSchema; exports.createQualificationSchema = createQualificationSchema; exports.employeeStatusEnum = employeeStatusEnum; exports.employmentTypeEnum = employmentTypeEnum; exports.getHrViewer = getHrViewer; exports.leaveStatusEnum = leaveStatusEnum; exports.leaveTypeEnum = leaveTypeEnum; exports.listEmployeeQuerySchema = listEmployeeQuerySchema; exports.qualificationTypeEnum = qualificationTypeEnum; exports.scopeWhere = scopeWhere; exports.updateAppointmentSchema = updateAppointmentSchema; exports.updateCareerSchema = updateCareerSchema; exports.updateContractSchema = updateContractSchema; exports.updateEducationSchema = updateEducationSchema; exports.updateEmployeeSchema = updateEmployeeSchema; exports.updateFamilySchema = updateFamilySchema; exports.updateLeaveBalanceSchema = updateLeaveBalanceSchema; exports.updateLeaveSchema = updateLeaveSchema; exports.updateQualificationSchema = updateQualificationSchema;
 //# sourceMappingURL=index.js.map

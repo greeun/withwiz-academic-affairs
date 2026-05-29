@@ -303,6 +303,78 @@ declare const updateAppointmentSchema: z.ZodObject<{
 }, z.core.$strip>;
 type CreateContractInput = z.infer<typeof createContractSchema>;
 type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
+declare const leaveTypeEnum: z.ZodEnum<{
+    ANNUAL: "ANNUAL";
+    SICK: "SICK";
+    OFFICIAL: "OFFICIAL";
+    FAMILY_EVENT: "FAMILY_EVENT";
+    BUSINESS_TRIP: "BUSINESS_TRIP";
+    OTHER: "OTHER";
+}>;
+declare const leaveStatusEnum: z.ZodEnum<{
+    REQUESTED: "REQUESTED";
+    APPROVED: "APPROVED";
+    REJECTED: "REJECTED";
+    CANCELED: "CANCELED";
+}>;
+declare const createLeaveSchema: z.ZodObject<{
+    type: z.ZodEnum<{
+        ANNUAL: "ANNUAL";
+        SICK: "SICK";
+        OFFICIAL: "OFFICIAL";
+        FAMILY_EVENT: "FAMILY_EVENT";
+        BUSINESS_TRIP: "BUSINESS_TRIP";
+        OTHER: "OTHER";
+    }>;
+    startDate: z.ZodString;
+    endDate: z.ZodString;
+    days: z.ZodCoercedNumber<unknown>;
+    reason: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodDefault<z.ZodEnum<{
+        REQUESTED: "REQUESTED";
+        APPROVED: "APPROVED";
+        REJECTED: "REJECTED";
+        CANCELED: "CANCELED";
+    }>>;
+}, z.core.$strip>;
+declare const updateLeaveSchema: z.ZodObject<{
+    type: z.ZodOptional<z.ZodEnum<{
+        ANNUAL: "ANNUAL";
+        SICK: "SICK";
+        OFFICIAL: "OFFICIAL";
+        FAMILY_EVENT: "FAMILY_EVENT";
+        BUSINESS_TRIP: "BUSINESS_TRIP";
+        OTHER: "OTHER";
+    }>>;
+    startDate: z.ZodOptional<z.ZodString>;
+    endDate: z.ZodOptional<z.ZodString>;
+    days: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+    reason: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodOptional<z.ZodEnum<{
+        REQUESTED: "REQUESTED";
+        APPROVED: "APPROVED";
+        REJECTED: "REJECTED";
+        CANCELED: "CANCELED";
+    }>>;
+    rejectReason: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.core.$strip>;
+declare const createLeaveBalanceSchema: z.ZodObject<{
+    year: z.ZodCoercedNumber<unknown>;
+    type: z.ZodDefault<z.ZodEnum<{
+        ANNUAL: "ANNUAL";
+        SICK: "SICK";
+        OFFICIAL: "OFFICIAL";
+        FAMILY_EVENT: "FAMILY_EVENT";
+        BUSINESS_TRIP: "BUSINESS_TRIP";
+        OTHER: "OTHER";
+    }>>;
+    entitledDays: z.ZodCoercedNumber<unknown>;
+}, z.core.$strip>;
+declare const updateLeaveBalanceSchema: z.ZodObject<{
+    entitledDays: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+type CreateLeaveInput = z.infer<typeof createLeaveSchema>;
+type CreateLeaveBalanceInput = z.infer<typeof createLeaveBalanceSchema>;
 
 /**
  * 로그인 사용자의 인사 viewer(staff 식별 + 권한)를 해석한다.
@@ -311,4 +383,4 @@ type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
  */
 declare function getHrViewer(prisma: any, userId: string): Promise<HrViewer | null>;
 
-export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateQualificationInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createQualificationSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateQualificationSchema };
+export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateLeaveBalanceInput, type CreateLeaveInput, type CreateQualificationInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createLeaveBalanceSchema, createLeaveSchema, createQualificationSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, leaveStatusEnum, leaveTypeEnum, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateLeaveBalanceSchema, updateLeaveSchema, updateQualificationSchema };

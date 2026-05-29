@@ -375,6 +375,44 @@ declare const updateLeaveBalanceSchema: z.ZodObject<{
 }, z.core.$strip>;
 type CreateLeaveInput = z.infer<typeof createLeaveSchema>;
 type CreateLeaveBalanceInput = z.infer<typeof createLeaveBalanceSchema>;
+declare const createTrainingSchema: z.ZodObject<{
+    title: z.ZodString;
+    institution: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    category: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    startDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    endDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    hours: z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>;
+    certNo: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateTrainingSchema: z.ZodObject<{
+    title: z.ZodOptional<z.ZodString>;
+    institution: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    category: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    startDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    endDate: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    hours: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>>;
+    certNo: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+declare const createReviewSchema: z.ZodObject<{
+    periodYear: z.ZodCoercedNumber<unknown>;
+    periodLabel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    score: z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>;
+    grade: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    comments: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+declare const updateReviewSchema: z.ZodObject<{
+    periodYear: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+    periodLabel: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    score: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodCoercedNumber<unknown>>>>;
+    grade: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    comments: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+}, z.core.$strip>;
+type CreateTrainingInput = z.infer<typeof createTrainingSchema>;
+type CreateReviewInput = z.infer<typeof createReviewSchema>;
 
 /**
  * 로그인 사용자의 인사 viewer(staff 식별 + 권한)를 해석한다.
@@ -383,4 +421,4 @@ type CreateLeaveBalanceInput = z.infer<typeof createLeaveBalanceSchema>;
  */
 declare function getHrViewer(prisma: any, userId: string): Promise<HrViewer | null>;
 
-export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateLeaveBalanceInput, type CreateLeaveInput, type CreateQualificationInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createLeaveBalanceSchema, createLeaveSchema, createQualificationSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, leaveStatusEnum, leaveTypeEnum, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateLeaveBalanceSchema, updateLeaveSchema, updateQualificationSchema };
+export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateLeaveBalanceInput, type CreateLeaveInput, type CreateQualificationInput, type CreateReviewInput, type CreateTrainingInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createLeaveBalanceSchema, createLeaveSchema, createQualificationSchema, createReviewSchema, createTrainingSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, leaveStatusEnum, leaveTypeEnum, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateLeaveBalanceSchema, updateLeaveSchema, updateQualificationSchema, updateReviewSchema, updateTrainingSchema };

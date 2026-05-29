@@ -108,3 +108,18 @@ describe("hr/schema 근태·휴가", () => {
     expect(createLeaveBalanceSchema.safeParse({ entitledDays: 15 }).success).toBe(false);
   });
 });
+
+import { createTrainingSchema, createReviewSchema } from "../../../src/hr/schema";
+describe("hr/schema 연수·평가", () => {
+  it("training: title 필수, 날짜형식, hours 정수", () => {
+    expect(createTrainingSchema.safeParse({ title: "직무연수" }).success).toBe(true);
+    expect(createTrainingSchema.safeParse({}).success).toBe(false);
+    expect(createTrainingSchema.safeParse({ title: "A", startDate: "2026/01/01" }).success).toBe(false);
+    expect(createTrainingSchema.safeParse({ title: "A", hours: 15 }).success).toBe(true);
+  });
+  it("review: periodYear 필수, score 소수 허용", () => {
+    expect(createReviewSchema.safeParse({ periodYear: 2026 }).success).toBe(true);
+    expect(createReviewSchema.safeParse({}).success).toBe(false);
+    expect(createReviewSchema.safeParse({ periodYear: 2026, score: 92.5 }).success).toBe(true);
+  });
+});

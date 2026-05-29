@@ -163,6 +163,26 @@ var createLeaveBalanceSchema = z.object({
 var updateLeaveBalanceSchema = z.object({
   entitledDays: z.coerce.number().min(0).max(366).optional()
 });
+var createTrainingSchema = z.object({
+  title: z.string().min(1).max(160),
+  institution: z.string().max(120).nullable().optional(),
+  category: z.string().max(60).nullable().optional(),
+  startDate: dateString.nullable().optional(),
+  endDate: dateString.nullable().optional(),
+  hours: z.coerce.number().int().min(0).nullable().optional(),
+  certNo: z.string().max(80).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional()
+});
+var updateTrainingSchema = createTrainingSchema.partial();
+var createReviewSchema = z.object({
+  periodYear: z.coerce.number().int().min(2e3).max(2100),
+  periodLabel: z.string().max(40).nullable().optional(),
+  score: z.coerce.number().min(0).max(100).nullable().optional(),
+  grade: z.string().max(40).nullable().optional(),
+  comments: z.string().max(4e3).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional()
+});
+var updateReviewSchema = createReviewSchema.partial();
 
 // src/hr/viewer.ts
 async function getHrViewer(prisma, userId) {
@@ -207,6 +227,8 @@ export {
   createLeaveBalanceSchema,
   createLeaveSchema,
   createQualificationSchema,
+  createReviewSchema,
+  createTrainingSchema,
   employeeStatusEnum,
   employmentTypeEnum,
   getHrViewer,
@@ -223,6 +245,8 @@ export {
   updateFamilySchema,
   updateLeaveBalanceSchema,
   updateLeaveSchema,
-  updateQualificationSchema
+  updateQualificationSchema,
+  updateReviewSchema,
+  updateTrainingSchema
 };
 //# sourceMappingURL=index.mjs.map

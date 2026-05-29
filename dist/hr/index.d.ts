@@ -59,7 +59,7 @@ declare const createEmployeeSchema: z.ZodObject<{
     militaryService: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phoneMobile: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phoneHome: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    email: z.ZodOptional<z.ZodNullable<z.ZodEmail>>;
     address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     domicile: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     jobCategory: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -92,7 +92,7 @@ declare const updateEmployeeSchema: z.ZodObject<{
     militaryService: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phoneMobile: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phoneHome: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    email: z.ZodOptional<z.ZodNullable<z.ZodEmail>>;
     address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     domicile: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     jobCategory: z.ZodOptional<z.ZodNullable<z.ZodString>>;

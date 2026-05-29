@@ -33,7 +33,7 @@ var employeeBase = {
   militaryService: z.string().max(200).nullable().optional(),
   phoneMobile: z.string().max(40).nullable().optional(),
   phoneHome: z.string().max(40).nullable().optional(),
-  email: z.string().email().max(200).nullable().optional(),
+  email: z.email().max(200).nullable().optional(),
   address: z.string().max(500).nullable().optional(),
   domicile: z.string().max(500).nullable().optional(),
   jobCategory: z.string().max(60).nullable().optional(),

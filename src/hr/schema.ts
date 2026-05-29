@@ -180,3 +180,30 @@ export const updateLeaveBalanceSchema = z.object({
 
 export type CreateLeaveInput = z.infer<typeof createLeaveSchema>;
 export type CreateLeaveBalanceInput = z.infer<typeof createLeaveBalanceSchema>;
+
+// ─── 하위 도메인: 연수(TrainingRecord) / 평가(PerformanceReview) ──────────────
+
+export const createTrainingSchema = z.object({
+  title: z.string().min(1).max(160),
+  institution: z.string().max(120).nullable().optional(),
+  category: z.string().max(60).nullable().optional(),
+  startDate: dateString.nullable().optional(),
+  endDate: dateString.nullable().optional(),
+  hours: z.coerce.number().int().min(0).nullable().optional(),
+  certNo: z.string().max(80).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateTrainingSchema = createTrainingSchema.partial();
+
+export const createReviewSchema = z.object({
+  periodYear: z.coerce.number().int().min(2000).max(2100),
+  periodLabel: z.string().max(40).nullable().optional(),
+  score: z.coerce.number().min(0).max(100).nullable().optional(),
+  grade: z.string().max(40).nullable().optional(),
+  comments: z.string().max(4000).nullable().optional(),
+  sortOrder: z.coerce.number().int().optional(),
+});
+export const updateReviewSchema = createReviewSchema.partial();
+
+export type CreateTrainingInput = z.infer<typeof createTrainingSchema>;
+export type CreateReviewInput = z.infer<typeof createReviewSchema>;

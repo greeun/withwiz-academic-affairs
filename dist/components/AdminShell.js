@@ -2,9 +2,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkRPY6K4E5js = require('../chunk-RPY6K4E5.js');
-require('../chunk-FJCSRKGN.js');
+var _chunkVBPQTGDHjs = require('../chunk-VBPQTGDH.js');
+require('../chunk-RKWWRCLN.js');
 
 
-exports.default = _chunkRPY6K4E5js.AdminShell;
+exports.default = _chunkVBPQTGDHjs.AdminShell;
 //# sourceMappingURL=AdminShell.js.map

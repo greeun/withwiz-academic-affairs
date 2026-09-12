@@ -1,8 +1,9 @@
 import { IAuthProvider } from '../auth/index.js';
 import { c as ISmsClient, a as IMailer, b as IObjectStorage, I as IClock } from '../clock-ApxcJEIv.js';
 import { L as LocaleOptions } from '../locale-Do6G5msk.js';
-import { MenuApiBundle, EffectivePermissions } from '../rbac/index.js';
-import '../actor-DlbHf9VQ.js';
+import { EffectivePermissions } from '../rbac/index.js';
+import { M as MenuApiBundle } from '../with-menu-api-D0BEIg7G.js';
+import { S as StaffActor } from '../actor-DlbHf9VQ.js';
 
 interface RbacConfig {
     /** Allowed menuKey values. Used for runtime validation in withMenuApi. */
@@ -12,11 +13,7 @@ interface RbacConfig {
     /** menuKeys gated to system roles only. Default: empty. */
     superAdminOnlyKeys?: readonly string[];
     /** Override the default super-admin check (Role.isSystem === true). */
-    superAdminCheck?: (actor: {
-        role?: {
-            isSystem: boolean;
-        };
-    }) => boolean;
+    superAdminCheck?: (actor: StaffActor) => boolean;
 }
 interface CreateSchoolAffairsConfig {
     prisma: any;

@@ -1,19 +1,20 @@
 import { z } from 'zod';
+import { safeUrl, shortText, mediumText, phoneText, partialUpdate } from './common';
 
 export const createStaffSchema = z.object({
-  name: z.string().min(1),
-  nameEn: z.string().optional(),
-  role: z.string().min(1),
-  department: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().email().optional(),
-  photoUrl: z.string().optional(),
-  bio: z.string().optional(),
+  name: shortText.min(1),
+  nameEn: shortText.optional(),
+  role: shortText.min(1),
+  department: shortText.optional(),
+  phone: phoneText.optional(),
+  email: z.string().email().max(200).optional(),
+  photoUrl: safeUrl.optional(),
+  bio: mediumText.optional(),
   sortOrder: z.number().int().default(0),
   isPublished: z.boolean().default(true),
 });
 
-export const updateStaffSchema = createStaffSchema.partial();
+export const updateStaffSchema = partialUpdate(createStaffSchema);
 
 export type CreateStaffDto = z.infer<typeof createStaffSchema>;
 export type UpdateStaffDto = z.infer<typeof updateStaffSchema>;

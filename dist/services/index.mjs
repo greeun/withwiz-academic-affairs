@@ -7,10 +7,11 @@ import {
   DEFAULT_LIMIT,
   DEFAULT_PAGE,
   FaqService,
+  STUDENT_SUMMARY_SELECT,
   StaffService,
   StudentService,
   parseSortParam
-} from "../chunk-LJFJUE4W.mjs";
+} from "../chunk-ACPRHA5C.mjs";
 import {
   buildPaginatedResult
 } from "../chunk-5U4CAFCL.mjs";
@@ -22,6 +23,7 @@ export {
   DEFAULT_LIMIT,
   DEFAULT_PAGE,
   FaqService,
+  STUDENT_SUMMARY_SELECT,
   StaffService,
   StudentService,
   buildPaginatedResult,

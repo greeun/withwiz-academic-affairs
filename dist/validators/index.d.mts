@@ -21,8 +21,8 @@ declare const updateStaffSchema: z.ZodObject<{
     email: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     photoUrl: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     bio: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    sortOrder: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
-    isPublished: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    sortOrder: z.ZodOptional<z.ZodNumber>;
+    isPublished: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strip>;
 type CreateStaffDto = z.infer<typeof createStaffSchema>;
 type UpdateStaffDto = z.infer<typeof updateStaffSchema>;
@@ -54,7 +54,7 @@ declare const updateTimetableSchema: z.ZodObject<{
     schoolLevel: z.ZodOptional<z.ZodString>;
     fileUrl: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     content: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    isActive: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    isActive: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strip>;
 declare const createAcademicEventSchema: z.ZodObject<{
     title: z.ZodString;
@@ -94,9 +94,9 @@ declare const updateAcademicEventSchema: z.ZodObject<{
     }>>;
     schoolLevel: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    isAllDay: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    isAllDay: z.ZodOptional<z.ZodBoolean>;
     color: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    isPublished: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    isPublished: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strip>;
 type CreateTimetableDto = z.infer<typeof createTimetableSchema>;
 type UpdateTimetableDto = z.infer<typeof updateTimetableSchema>;
@@ -114,8 +114,8 @@ declare const updateFaqSchema: z.ZodObject<{
     question: z.ZodOptional<z.ZodString>;
     answer: z.ZodOptional<z.ZodString>;
     categoryId: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    order: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
-    isPublished: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    order: z.ZodOptional<z.ZodNumber>;
+    isPublished: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strip>;
 declare const createFaqCategorySchema: z.ZodObject<{
     name: z.ZodString;
@@ -123,7 +123,7 @@ declare const createFaqCategorySchema: z.ZodObject<{
 }, z.core.$strip>;
 declare const updateFaqCategorySchema: z.ZodObject<{
     name: z.ZodOptional<z.ZodString>;
-    order: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
+    order: z.ZodOptional<z.ZodNumber>;
 }, z.core.$strip>;
 type CreateFaqDto = z.infer<typeof createFaqSchema>;
 type UpdateFaqDto = z.infer<typeof updateFaqSchema>;
@@ -160,12 +160,12 @@ declare const updateStudentSchema: z.ZodObject<{
     phone: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     parentPhone: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     parentName: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    status: z.ZodOptional<z.ZodDefault<z.ZodEnum<{
+    status: z.ZodOptional<z.ZodEnum<{
         ACTIVE: "ACTIVE";
         ON_LEAVE: "ON_LEAVE";
         GRADUATED: "GRADUATED";
         WITHDRAWN: "WITHDRAWN";
-    }>>>;
+    }>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
 }, z.core.$strip>;
 type CreateStudentDto = z.infer<typeof createStudentSchema>;
@@ -178,6 +178,7 @@ declare const attendanceStatusEnum: z.ZodEnum<{
     EARLY_LEAVE: "EARLY_LEAVE";
     EXCUSED: "EXCUSED";
 }>;
+declare const MAX_BULK_ATTENDANCE = 500;
 declare const createAttendanceSchema: z.ZodObject<{
     studentId: z.ZodString;
     date: z.ZodCoercedDate<unknown>;
@@ -190,8 +191,8 @@ declare const createAttendanceSchema: z.ZodObject<{
     }>;
     reason: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
+/** A record stays attached to its student; `studentId` cannot be changed via update. */
 declare const updateAttendanceSchema: z.ZodObject<{
-    studentId: z.ZodOptional<z.ZodString>;
     date: z.ZodOptional<z.ZodCoercedDate<unknown>>;
     status: z.ZodOptional<z.ZodEnum<{
         PRESENT: "PRESENT";
@@ -256,9 +257,9 @@ declare const createCounselingSchema: z.ZodObject<{
     }>>;
     notes: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
+/** `counselorId` is fixed at creation (defaults to the acting staff) and cannot be reassigned via update. */
 declare const updateCounselingSchema: z.ZodObject<{
-    studentId: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    counselorId: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    title: z.ZodOptional<z.ZodString>;
     type: z.ZodOptional<z.ZodEnum<{
         INITIAL: "INITIAL";
         REGULAR: "REGULAR";
@@ -266,17 +267,17 @@ declare const updateCounselingSchema: z.ZodObject<{
         PARENT: "PARENT";
         ADMISSION: "ADMISSION";
     }>>;
-    date: z.ZodOptional<z.ZodCoercedDate<unknown>>;
-    title: z.ZodOptional<z.ZodString>;
     content: z.ZodOptional<z.ZodString>;
-    parentName: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    parentPhone: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    status: z.ZodOptional<z.ZodDefault<z.ZodEnum<{
+    date: z.ZodOptional<z.ZodCoercedDate<unknown>>;
+    status: z.ZodOptional<z.ZodEnum<{
         SCHEDULED: "SCHEDULED";
         COMPLETED: "COMPLETED";
         CANCELLED: "CANCELLED";
         NO_SHOW: "NO_SHOW";
-    }>>>;
+    }>>;
+    studentId: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    parentPhone: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    parentName: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
 }, z.core.$strip>;
 type CreateCounselingDto = z.infer<typeof createCounselingSchema>;
@@ -300,9 +301,9 @@ declare const updateAdmissionSessionSchema: z.ZodObject<{
     title: z.ZodOptional<z.ZodString>;
     date: z.ZodOptional<z.ZodCoercedDate<unknown>>;
     location: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    capacity: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
+    capacity: z.ZodOptional<z.ZodNumber>;
     description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    isOpen: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    isOpen: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strip>;
 declare const createAdmissionRegistrationSchema: z.ZodObject<{
     sessionId: z.ZodString;
@@ -327,16 +328,39 @@ declare const updateAdmissionRegistrationSchema: z.ZodObject<{
     studentName: z.ZodOptional<z.ZodString>;
     studentGrade: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     message: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    status: z.ZodOptional<z.ZodDefault<z.ZodEnum<{
+    status: z.ZodOptional<z.ZodEnum<{
         CANCELLED: "CANCELLED";
         PENDING: "PENDING";
         CONFIRMED: "CONFIRMED";
         ATTENDED: "ATTENDED";
-    }>>>;
+    }>>;
 }, z.core.$strip>;
 type CreateAdmissionSessionDto = z.infer<typeof createAdmissionSessionSchema>;
 type UpdateAdmissionSessionDto = z.infer<typeof updateAdmissionSessionSchema>;
 type CreateAdmissionRegistrationDto = z.infer<typeof createAdmissionRegistrationSchema>;
 type UpdateAdmissionRegistrationDto = z.infer<typeof updateAdmissionRegistrationSchema>;
 
-export { type BulkAttendanceDto, type CreateAcademicEventDto, type CreateAdmissionRegistrationDto, type CreateAdmissionSessionDto, type CreateAttendanceDto, type CreateCounselingDto, type CreateFaqCategoryDto, type CreateFaqDto, type CreateStaffDto, type CreateStudentDto, type CreateTimetableDto, type UpdateAcademicEventDto, type UpdateAdmissionRegistrationDto, type UpdateAdmissionSessionDto, type UpdateAttendanceDto, type UpdateCounselingDto, type UpdateFaqCategoryDto, type UpdateFaqDto, type UpdateStaffDto, type UpdateStudentDto, type UpdateTimetableDto, academicEventTypeEnum, attendanceStatusEnum, bulkAttendanceSchema, counselingStatusEnum, counselingTypeEnum, createAcademicEventSchema, createAdmissionRegistrationSchema, createAdmissionSessionSchema, createAttendanceSchema, createCounselingSchema, createFaqCategorySchema, createFaqSchema, createStaffSchema, createStudentSchema, createTimetableSchema, registrationStatusEnum, studentStatusEnum, updateAcademicEventSchema, updateAdmissionRegistrationSchema, updateAdmissionSessionSchema, updateAttendanceSchema, updateCounselingSchema, updateFaqCategorySchema, updateFaqSchema, updateStaffSchema, updateStudentSchema, updateTimetableSchema };
+declare const SHORT_TEXT_MAX = 200;
+declare const MEDIUM_TEXT_MAX = 2000;
+declare const LONG_TEXT_MAX = 20000;
+declare const URL_MAX = 2048;
+declare const PHONE_MAX = 40;
+/** Accepts absolute http(s) URLs or site-relative paths; rejects `javascript:` and other schemes. */
+declare function isSafeUrl(value: string): boolean;
+declare const safeUrl: z.ZodString;
+declare const hexColor: z.ZodString;
+declare const shortText: z.ZodString;
+declare const mediumText: z.ZodString;
+declare const longText: z.ZodString;
+declare const phoneText: z.ZodString;
+type StripDefault<T> = T extends z.ZodDefault<infer U> ? U : T;
+type UpdateShape<T extends z.ZodRawShape> = {
+    [K in keyof T]: z.ZodOptional<StripDefault<T[K]>>;
+};
+/**
+ * Builds a partial-update schema. Unlike `.partial()`, fields declared with `.default()` lose
+ * their default, so a PUT with a subset of fields never silently resets the others.
+ */
+declare function partialUpdate<T extends z.ZodRawShape>(schema: z.ZodObject<T>): z.ZodObject<UpdateShape<T>>;
+
+export { type BulkAttendanceDto, type CreateAcademicEventDto, type CreateAdmissionRegistrationDto, type CreateAdmissionSessionDto, type CreateAttendanceDto, type CreateCounselingDto, type CreateFaqCategoryDto, type CreateFaqDto, type CreateStaffDto, type CreateStudentDto, type CreateTimetableDto, LONG_TEXT_MAX, MAX_BULK_ATTENDANCE, MEDIUM_TEXT_MAX, PHONE_MAX, SHORT_TEXT_MAX, URL_MAX, type UpdateAcademicEventDto, type UpdateAdmissionRegistrationDto, type UpdateAdmissionSessionDto, type UpdateAttendanceDto, type UpdateCounselingDto, type UpdateFaqCategoryDto, type UpdateFaqDto, type UpdateStaffDto, type UpdateStudentDto, type UpdateTimetableDto, academicEventTypeEnum, attendanceStatusEnum, bulkAttendanceSchema, counselingStatusEnum, counselingTypeEnum, createAcademicEventSchema, createAdmissionRegistrationSchema, createAdmissionSessionSchema, createAttendanceSchema, createCounselingSchema, createFaqCategorySchema, createFaqSchema, createStaffSchema, createStudentSchema, createTimetableSchema, hexColor, isSafeUrl, longText, mediumText, partialUpdate, phoneText, registrationStatusEnum, safeUrl, shortText, studentStatusEnum, updateAcademicEventSchema, updateAdmissionRegistrationSchema, updateAdmissionSessionSchema, updateAttendanceSchema, updateCounselingSchema, updateFaqCategorySchema, updateFaqSchema, updateStaffSchema, updateStudentSchema, updateTimetableSchema };

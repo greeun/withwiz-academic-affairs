@@ -1,6 +1,6 @@
 import { buildPaginatedResult } from '../types/common';
 import type { PaginatedResult } from '../types/common';
-import { DEFAULT_PAGE, DEFAULT_LIMIT, parseSortParam } from './base-service';
+import { DEFAULT_PAGE, DEFAULT_LIMIT, parseSortParam, STUDENT_SUMMARY_SELECT } from './base-service';
 
 interface ListParams {
   page?: number;
@@ -34,7 +34,7 @@ export class CounselingService {
         orderBy: { [field]: order },
         skip: (page - 1) * limit,
         take: limit,
-        include: { student: true },
+        include: { student: { select: STUDENT_SUMMARY_SELECT } },
       }),
       this.prisma.counseling.count({ where }),
     ]);
@@ -43,7 +43,7 @@ export class CounselingService {
   }
 
   async getById(id: string) {
-    return this.prisma.counseling.findUnique({ where: { id }, include: { student: true } });
+    return this.prisma.counseling.findUnique({ where: { id }, include: { student: { select: STUDENT_SUMMARY_SELECT } } });
   }
 
   async create(data: Record<string, unknown>) {
@@ -65,7 +65,7 @@ export class CounselingService {
         status: 'SCHEDULED',
         date: { gte: now },
       },
-      include: { student: true },
+      include: { student: { select: STUDENT_SUMMARY_SELECT } },
       orderBy: { date: 'asc' },
     });
   }
@@ -73,7 +73,7 @@ export class CounselingService {
   async getByStudent(studentId: string) {
     return this.prisma.counseling.findMany({
       where: { studentId },
-      include: { student: true },
+      include: { student: { select: STUDENT_SUMMARY_SELECT } },
       orderBy: { date: 'desc' },
     });
   }

@@ -1,7 +1,9 @@
 import {
-  adminFetch
-} from "../chunk-L55N6LYP.mjs";
+  adminFetch,
+  isSameOrigin
+} from "../chunk-JSUEPRBT.mjs";
 export {
-  adminFetch
+  adminFetch,
+  isSameOrigin
 };
 //# sourceMappingURL=admin-fetch.mjs.map

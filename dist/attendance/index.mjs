@@ -18,14 +18,17 @@ function formatSchoolLevel(level) {
 }
 
 // src/attendance/sanitize.ts
-var CONTROL_CHAR_RE = new RegExp("[\\x00-\\x1F\\x7F]", "g");
+var CONTROL_CHAR_RE = new RegExp("[\\x00-\\x1F\\x7F\\u0085\\u2028\\u2029]", "g");
+var HEADER_DELIM_RE = /["';]/g;
 function sanitizeFilename(name) {
   let s = name ?? "";
   s = s.replace(/\\/g, "_");
   s = s.replace(/\//g, "_");
   s = s.replace(/\.\.+/g, "_");
+  s = s.replace(HEADER_DELIM_RE, "_");
   s = s.replace(CONTROL_CHAR_RE, "_");
   s = s.replace(/\s+/g, " ").trim();
+  s = s.replace(/^\.+/, "");
   if (s.length === 0) s = "untitled";
   const enc = new TextEncoder();
   let bytes = enc.encode(s);

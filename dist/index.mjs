@@ -1,10 +1,10 @@
 import {
   createSchoolAffairs
-} from "./chunk-5MEAO4RA.mjs";
+} from "./chunk-WRJCFX4U.mjs";
 import "./chunk-MGBP2Z6J.mjs";
 import {
   createMenuApi
-} from "./chunk-QKXG62LN.mjs";
+} from "./chunk-VQZ32TWX.mjs";
 import {
   STANDARD_SCHOOL_ROLES
 } from "./chunk-2NGCPKLV.mjs";
@@ -17,33 +17,30 @@ import {
   formatDate,
   timeAgo
 } from "./chunk-OXW2B2Q3.mjs";
-import "./chunk-DCFKV7OR.mjs";
+import "./chunk-FGZMG5A6.mjs";
 import "./chunk-H43BUZKY.mjs";
-import {
-  AcademicAffairsError
-} from "./chunk-QIK4YES6.mjs";
 import "./chunk-GWQMMN7I.mjs";
 import {
   AdminManagerBase,
   ImageDropUpload,
   ToggleSwitch
-} from "./chunk-HILCGJ5K.mjs";
+} from "./chunk-5ZEXSS77.mjs";
 import {
   AdminShell
-} from "./chunk-TDMTJMSK.mjs";
+} from "./chunk-F63PVXD3.mjs";
 import "./chunk-BVQRDAR7.mjs";
 import {
   useAdminForm,
   useAdminList,
   useImageDropZone
-} from "./chunk-A65N5ALW.mjs";
+} from "./chunk-4DTUND3E.mjs";
 import {
   resizeImageIfNeeded,
   validateImageSize
 } from "./chunk-J5N76ASB.mjs";
 import {
   adminFetch
-} from "./chunk-L55N6LYP.mjs";
+} from "./chunk-JSUEPRBT.mjs";
 import {
   SystemClock,
   getPrisma,
@@ -57,6 +54,9 @@ import {
 } from "./chunk-H2EA26KT.mjs";
 import "./chunk-RQZXAC67.mjs";
 import {
+  DEFAULT_LIST_LIMIT,
+  MAX_LIST_LIMIT,
+  adaptContextWrapper,
   createAcademicCalendarHandlers,
   createAcademicSystem,
   createAdmissionHandlers,
@@ -65,12 +65,23 @@ import {
   createDashboardHandlers,
   createFaqHandlers,
   createStaffHandlers,
-  createStudentHandlers
-} from "./chunk-T66RRQC5.mjs";
+  createStudentHandlers,
+  guard,
+  listQuerySchema,
+  parseQuery,
+  queryObject,
+  resolveParam
+} from "./chunk-DAUKROHJ.mjs";
 import {
   NextApiResponse
 } from "./chunk-4AHS2SIY.mjs";
 import {
+  LONG_TEXT_MAX,
+  MAX_BULK_ATTENDANCE,
+  MEDIUM_TEXT_MAX,
+  PHONE_MAX,
+  SHORT_TEXT_MAX,
+  URL_MAX,
   academicEventTypeEnum,
   attendanceStatusEnum,
   bulkAttendanceSchema,
@@ -86,7 +97,15 @@ import {
   createStaffSchema,
   createStudentSchema,
   createTimetableSchema,
+  hexColor,
+  isSafeUrl,
+  longText,
+  mediumText,
+  partialUpdate,
+  phoneText,
   registrationStatusEnum,
+  safeUrl,
+  shortText,
   studentStatusEnum,
   updateAcademicEventSchema,
   updateAdmissionRegistrationSchema,
@@ -98,7 +117,10 @@ import {
   updateStaffSchema,
   updateStudentSchema,
   updateTimetableSchema
-} from "./chunk-PDPSZ56T.mjs";
+} from "./chunk-T3WKWIOX.mjs";
+import {
+  AcademicAffairsError
+} from "./chunk-QIK4YES6.mjs";
 import {
   AcademicCalendarService,
   AdmissionService,
@@ -107,10 +129,11 @@ import {
   DEFAULT_LIMIT,
   DEFAULT_PAGE,
   FaqService,
+  STUDENT_SUMMARY_SELECT,
   StaffService,
   StudentService,
   parseSortParam
-} from "./chunk-LJFJUE4W.mjs";
+} from "./chunk-ACPRHA5C.mjs";
 import {
   buildPaginatedResult
 } from "./chunk-5U4CAFCL.mjs";
@@ -123,16 +146,26 @@ export {
   AttendanceService,
   CounselingService,
   DEFAULT_LIMIT,
+  DEFAULT_LIST_LIMIT,
   DEFAULT_PAGE,
   FaqService,
   ImageDropUpload,
+  LONG_TEXT_MAX,
+  MAX_BULK_ATTENDANCE,
+  MAX_LIST_LIMIT,
+  MEDIUM_TEXT_MAX,
   NextApiResponse,
+  PHONE_MAX,
+  SHORT_TEXT_MAX,
   STANDARD_SCHOOL_ROLES,
+  STUDENT_SUMMARY_SELECT,
   StaffService,
   StudentService,
   SystemClock,
   ToggleSwitch,
+  URL_MAX,
   academicEventTypeEnum,
+  adaptContextWrapper,
   adminFetch,
   attendanceStatusEnum,
   buildPaginatedResult,
@@ -163,11 +196,24 @@ export {
   createTimetableSchema,
   formatDate,
   getPrisma,
+  guard,
+  hexColor,
+  isSafeUrl,
+  listQuerySchema,
+  longText,
+  mediumText,
+  parseQuery,
   parseSortParam,
+  partialUpdate,
   permissionsOf,
+  phoneText,
+  queryObject,
   registrationStatusEnum,
   resizeImageIfNeeded,
+  resolveParam,
+  safeUrl,
   setPrisma,
+  shortText,
   studentStatusEnum,
   timeAgo,
   updateAcademicEventSchema,

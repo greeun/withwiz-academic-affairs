@@ -69,7 +69,7 @@ describe('CounselingService', () => {
       expect(result).toEqual(item);
       expect(mockPrisma.counseling.findUnique).toHaveBeenCalledWith({
         where: { id: '1' },
-        include: { student: true },
+        include: { student: { select: { id: true, name: true, grade: true, classGroup: true, status: true } } },
       });
     });
   });
@@ -122,7 +122,7 @@ describe('CounselingService', () => {
       expect(call.where.status).toBe('SCHEDULED');
       expect(call.where.date.gte).toBeDefined();
       expect(call.where.date.gte instanceof Date).toBe(true);
-      expect(call.include.student).toBe(true);
+      expect(call.include.student.select).toEqual({ id: true, name: true, grade: true, classGroup: true, status: true });
       expect(call.orderBy).toEqual({ date: 'asc' });
     });
   });
@@ -137,7 +137,7 @@ describe('CounselingService', () => {
       expect(result).toEqual(items);
       const call = mockPrisma.counseling.findMany.mock.calls[0][0];
       expect(call.where.studentId).toBe('s1');
-      expect(call.include.student).toBe(true);
+      expect(call.include.student.select).toEqual({ id: true, name: true, grade: true, classGroup: true, status: true });
       expect(call.orderBy).toEqual({ date: 'desc' });
     });
   });

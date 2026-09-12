@@ -1,42 +1,42 @@
 import { AdmissionService } from '../services/admission.service';
-import { createAdmissionSessionSchema, updateAdmissionSessionSchema, createAdmissionRegistrationSchema } from '../validators/admission.validator';
+import { createAdmissionSessionSchema, updateAdmissionSessionSchema } from '../validators/admission.validator';
 import { NextApiResponse } from '../utils/api-response';
+import { guard, listQuerySchema, parseQuery, resolveParam, type AdminApiWrapper } from './route';
 
-export function createAdmissionHandlers(service: AdmissionService, withAdminApi: (handler: Function) => Function) {
+export function createAdmissionHandlers(service: AdmissionService, withAdminApi: AdminApiWrapper) {
   const list = {
-    GET: withAdminApi(async (req: Request) => {
-      const url = new URL(req.url);
-      const page = Number(url.searchParams.get('page')) || 1;
-      const limit = Number(url.searchParams.get('limit')) || 20;
-      const sortBy = url.searchParams.get('sortBy') || undefined;
-
-      const result = await service.listSessions({ page, limit, sortBy });
+    GET: withAdminApi(guard(async (req) => {
+      const result = await service.listSessions(parseQuery(req, listQuerySchema));
       return NextApiResponse.success(result);
-    }),
-    POST: withAdminApi(async (req: Request) => {
-      const body = await req.json();
-      const data = createAdmissionSessionSchema.parse(body);
+    })),
+    POST: withAdminApi(guard(async (req) => {
+      const data = createAdmissionSessionSchema.parse(await req.json());
       const created = await service.createSession(data);
       return NextApiResponse.created(created);
-    }),
+    })),
   };
 
   const detail = {
-    GET: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const item = await service.getSessionById(ctx.params.id);
+    GET: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const item = await service.getSessionById(id);
       if (!item) return NextApiResponse.notFound();
       return NextApiResponse.success(item);
-    }),
-    PUT: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const body = await req.json();
-      const data = updateAdmissionSessionSchema.parse(body);
-      const updated = await service.updateSession(ctx.params.id, data);
+    })),
+    PUT: withAdminApi(guard(async (req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const data = updateAdmissionSessionSchema.parse(await req.json());
+      const updated = await service.updateSession(id, data);
       return NextApiResponse.success(updated);
-    }),
-    DELETE: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      await service.deleteSession(ctx.params.id);
+    })),
+    DELETE: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      await service.deleteSession(id);
       return NextApiResponse.noContent();
-    }),
+    })),
   };
 
   return { list, detail };

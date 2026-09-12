@@ -60,7 +60,7 @@ describe('AttendanceService', () => {
       expect(result).toEqual(item);
       expect(mockPrisma.attendance.findUnique).toHaveBeenCalledWith({
         where: { id: '1' },
-        include: { student: true },
+        include: { student: { select: { id: true, name: true, grade: true, classGroup: true, status: true } } },
       });
     });
   });
@@ -130,7 +130,7 @@ describe('AttendanceService', () => {
       const call = mockPrisma.attendance.findMany.mock.calls[0][0];
       expect(call.where.date.gte).toBeDefined();
       expect(call.where.date.lte).toBeDefined();
-      expect(call.include.student).toBe(true);
+      expect(call.include.student.select).toEqual({ id: true, name: true, grade: true, classGroup: true, status: true });
     });
   });
 

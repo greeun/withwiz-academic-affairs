@@ -5,3 +5,4 @@ export * from './student.validator';
 export * from './attendance.validator';
 export * from './counseling.validator';
 export * from './admission.validator';
+export * from './common';

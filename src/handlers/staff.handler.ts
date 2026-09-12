@@ -1,43 +1,47 @@
+import { z } from 'zod';
 import { StaffService } from '../services/staff.service';
 import { createStaffSchema, updateStaffSchema } from '../validators/staff.validator';
 import { NextApiResponse } from '../utils/api-response';
+import { guard, listQuerySchema, parseQuery, resolveParam, type AdminApiWrapper } from './route';
 
-export function createStaffHandlers(service: StaffService, withAdminApi: (handler: Function) => Function) {
+const listQuery = listQuerySchema.extend({
+  role: z.string().max(64).optional(),
+});
+
+export function createStaffHandlers(service: StaffService, withAdminApi: AdminApiWrapper) {
   const list = {
-    GET: withAdminApi(async (req: Request) => {
-      const url = new URL(req.url);
-      const page = Number(url.searchParams.get('page')) || 1;
-      const limit = Number(url.searchParams.get('limit')) || 20;
-      const sortBy = url.searchParams.get('sortBy') || undefined;
-      const role = url.searchParams.get('role') || undefined;
-
-      const result = await service.list({ page, limit, sortBy, role });
+    GET: withAdminApi(guard(async (req) => {
+      const result = await service.list(parseQuery(req, listQuery));
       return NextApiResponse.success(result);
-    }),
-    POST: withAdminApi(async (req: Request) => {
-      const body = await req.json();
-      const data = createStaffSchema.parse(body);
+    })),
+    POST: withAdminApi(guard(async (req) => {
+      const data = createStaffSchema.parse(await req.json());
       const created = await service.create(data);
       return NextApiResponse.created(created);
-    }),
+    })),
   };
 
   const detail = {
-    GET: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const item = await service.getById(ctx.params.id);
+    GET: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const item = await service.getById(id);
       if (!item) return NextApiResponse.notFound();
       return NextApiResponse.success(item);
-    }),
-    PUT: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const body = await req.json();
-      const data = updateStaffSchema.parse(body);
-      const updated = await service.update(ctx.params.id, data);
+    })),
+    PUT: withAdminApi(guard(async (req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const data = updateStaffSchema.parse(await req.json());
+      const updated = await service.update(id, data);
       return NextApiResponse.success(updated);
-    }),
-    DELETE: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      await service.delete(ctx.params.id);
+    })),
+    DELETE: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      await service.delete(id);
       return NextApiResponse.noContent();
-    }),
+    })),
   };
 
   return { list, detail };

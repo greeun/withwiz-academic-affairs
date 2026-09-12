@@ -93,16 +93,50 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 }
 ```
 
-### 2. 미들웨어 래퍼로 API 라우트 작성
+### 2. 인증 래퍼로 API 라우트 구성
+
+생성된 모든 핸들러는 `(req, actor, props)`를 받으며 **반드시** 래퍼로 감싸야 합니다. `withAdminApi`가
+없으면 `createAcademicSystem`이 예외를 던지므로 인증 없이 노출되는 경로는 없습니다. 패키지 RBAC
+(`createSchoolAffairs(...).rbac` 또는 `createMenuApi`)로 래퍼를 만들면 menuKey 권한이 함께 검사됩니다:
+
+```ts
+// lib/academic.ts
+import { createSchoolAffairs } from "@withwiz/academic-affairs/facade";
+import { createAcademicSystem } from "@withwiz/academic-affairs/handlers";
+
+const affairs = createSchoolAffairs({ prisma, auth, rbac: { menuKeys: ["students", "attendance"] } });
+
+export const academic = createAcademicSystem({
+  prisma,
+  domains: { student: true, attendance: true },
+  // 이 시스템의 핸들러는 "students" menuKey 권한으로 보호됩니다.
+  withAdminApi: (handler) => affairs.rbac.withMenuApi("students", handler),
+});
+```
 
 ```ts
 // app/api/admin/students/route.ts
-import { withAdminApi } from "@withwiz/academic-affairs/infrastructure/middleware";
-import { studentHandlers } from "@withwiz/academic-affairs/handlers";
+import { academic } from "@/lib/academic";
 
-export const GET  = withAdminApi(studentHandlers.list);
-export const POST = withAdminApi(studentHandlers.create);
+export const { GET, POST } = academic.handlers.student!.list;
 ```
+
+```ts
+// app/api/admin/students/[id]/route.ts
+export const { GET, PUT, DELETE } = academic.handlers.student!.detail;
+```
+
+`@withwiz/toolkit`의 `withAdminApi`로 인증하는 경우에는 `adaptContextWrapper`로 연결합니다. 이 함수는
+JWT 사용자를 `StaffActor`로 변환하고, 역할이 없는 사용자는 거부합니다:
+
+```ts
+import { withAdminApi } from "@withwiz/academic-affairs/infrastructure/middleware";
+import { adaptContextWrapper } from "@withwiz/academic-affairs/handlers";
+
+const wrapper = adaptContextWrapper(withAdminApi as never, (user) => auth.getStaffByUserId(user.id));
+```
+
+목록 엔드포인트는 `page`, `limit`(최대 200), `sortBy`를 받으며, 잘못된 필터는 `400`을 반환합니다.
 
 ### 3. 도메인 서비스 직접 사용
 

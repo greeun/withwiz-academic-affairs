@@ -41,11 +41,24 @@ async function tryRefresh(): Promise<boolean> {
   return refreshPromise;
 }
 
+/** Bearer tokens are only attached to same-origin requests so they never leak to third-party hosts. */
+export function isSameOrigin(url: string): boolean {
+  if (typeof window === 'undefined') return false;
+  // Site-relative paths always target the current origin (protocol-relative `//host` does not).
+  if (url.startsWith('/')) return !url.startsWith('//');
+  try {
+    return new URL(url, window.location.href).origin === window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
 export async function adminFetch(
   url: string,
   options: RequestInit = {},
 ): Promise<Response> {
-  const accessToken = typeof localStorage !== 'undefined'
+  const sameOrigin = isSameOrigin(url);
+  const accessToken = sameOrigin && typeof localStorage !== 'undefined'
     ? localStorage.getItem('accessToken')
     : null;
   const headers = new Headers(options.headers);
@@ -59,7 +72,7 @@ export async function adminFetch(
     credentials: 'same-origin',
   });
 
-  if (res.status === 401 && typeof window !== 'undefined') {
+  if (res.status === 401 && sameOrigin) {
     const refreshed = await tryRefresh();
 
     if (refreshed) {

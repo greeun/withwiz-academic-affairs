@@ -44,6 +44,7 @@ export default defineConfig({
     'rbac/index': 'src/rbac/index.ts',
     'presets/index': 'src/presets/index.ts',
     'counseling/index': 'src/counseling/index.ts',
+    'hr/index': 'src/hr/index.ts',
     'scheduling/index': 'src/scheduling/index.ts',
     'attendance/index': 'src/attendance/index.ts',
   },

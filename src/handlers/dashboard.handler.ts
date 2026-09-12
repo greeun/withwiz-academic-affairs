@@ -1,4 +1,5 @@
 import { NextApiResponse } from '../utils/api-response';
+import { guard, type AdminApiWrapper } from './route';
 
 interface DashboardServices {
   staff?: { getStats(): Promise<any> };
@@ -10,9 +11,9 @@ interface DashboardServices {
   admission?: { getStats(): Promise<any> };
 }
 
-export function createDashboardHandlers(services: DashboardServices, withAdminApi: (handler: Function) => Function) {
+export function createDashboardHandlers(services: DashboardServices, withAdminApi: AdminApiWrapper) {
   const stats = {
-    GET: withAdminApi(async () => {
+    GET: withAdminApi(guard(async () => {
       const results: Record<string, any> = {};
 
       const entries = Object.entries(services) as [string, { getStats(): Promise<any> }][];
@@ -32,7 +33,7 @@ export function createDashboardHandlers(services: DashboardServices, withAdminAp
       }
 
       return NextApiResponse.success(results);
-    }),
+    })),
   };
 
   return { stats };

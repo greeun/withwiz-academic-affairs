@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { safeUrl, hexColor, shortText, mediumText, longText, partialUpdate } from './common';
 
 export const academicEventTypeEnum = z.enum([
   'SEMESTER_START',
@@ -13,30 +14,30 @@ export const academicEventTypeEnum = z.enum([
 ]);
 
 export const createTimetableSchema = z.object({
-  title: z.string().min(1),
+  title: shortText.min(1),
   year: z.number().int().min(2000).max(2100),
   semester: z.number().int().min(1).max(2),
-  schoolLevel: z.string().min(1),
-  fileUrl: z.string().optional(),
-  content: z.string().optional(),
+  schoolLevel: z.string().min(1).max(32),
+  fileUrl: safeUrl.optional(),
+  content: longText.optional(),
   isActive: z.boolean().default(true),
 });
 
-export const updateTimetableSchema = createTimetableSchema.partial();
+export const updateTimetableSchema = partialUpdate(createTimetableSchema);
 
 export const createAcademicEventSchema = z.object({
-  title: z.string().min(1),
+  title: shortText.min(1),
   startDate: z.coerce.date(),
   endDate: z.coerce.date().optional(),
   type: academicEventTypeEnum,
-  schoolLevel: z.string().optional(),
-  description: z.string().optional(),
+  schoolLevel: z.string().max(32).optional(),
+  description: mediumText.optional(),
   isAllDay: z.boolean().default(true),
-  color: z.string().optional(),
+  color: hexColor.optional(),
   isPublished: z.boolean().default(true),
 });
 
-export const updateAcademicEventSchema = createAcademicEventSchema.partial();
+export const updateAcademicEventSchema = partialUpdate(createAcademicEventSchema);
 
 export type CreateTimetableDto = z.infer<typeof createTimetableSchema>;
 export type UpdateTimetableDto = z.infer<typeof updateTimetableSchema>;

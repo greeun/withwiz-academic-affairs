@@ -1,45 +1,56 @@
+import { z } from 'zod';
 import { CounselingService } from '../services/counseling.service';
-import { createCounselingSchema, updateCounselingSchema } from '../validators/counseling.validator';
+import {
+  createCounselingSchema,
+  updateCounselingSchema,
+  counselingTypeEnum,
+  counselingStatusEnum,
+} from '../validators/counseling.validator';
 import { NextApiResponse } from '../utils/api-response';
+import { guard, listQuerySchema, parseQuery, resolveParam, type AdminApiWrapper } from './route';
 
-export function createCounselingHandlers(service: CounselingService, withAdminApi: (handler: Function) => Function) {
+const listQuery = listQuerySchema.extend({
+  studentId: z.string().max(64).optional(),
+  type: counselingTypeEnum.optional(),
+  status: counselingStatusEnum.optional(),
+});
+
+export function createCounselingHandlers(service: CounselingService, withAdminApi: AdminApiWrapper) {
   const list = {
-    GET: withAdminApi(async (req: Request) => {
-      const url = new URL(req.url);
-      const page = Number(url.searchParams.get('page')) || 1;
-      const limit = Number(url.searchParams.get('limit')) || 20;
-      const sortBy = url.searchParams.get('sortBy') || undefined;
-      const studentId = url.searchParams.get('studentId') || undefined;
-      const type = url.searchParams.get('type') || undefined;
-      const status = url.searchParams.get('status') || undefined;
-
-      const result = await service.list({ page, limit, sortBy, studentId, type, status });
+    GET: withAdminApi(guard(async (req) => {
+      const result = await service.list(parseQuery(req, listQuery));
       return NextApiResponse.success(result);
-    }),
-    POST: withAdminApi(async (req: Request) => {
-      const body = await req.json();
-      const data = createCounselingSchema.parse(body);
-      const created = await service.create(data);
+    })),
+    POST: withAdminApi(guard(async (req, actor) => {
+      const data = createCounselingSchema.parse(await req.json());
+      // The counselor defaults to the acting staff member; explicit assignment stays possible.
+      const counselorId = data.counselorId ?? actor.staffId;
+      const created = await service.create({ ...data, counselorId });
       return NextApiResponse.created(created);
-    }),
+    })),
   };
 
   const detail = {
-    GET: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const item = await service.getById(ctx.params.id);
+    GET: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const item = await service.getById(id);
       if (!item) return NextApiResponse.notFound();
       return NextApiResponse.success(item);
-    }),
-    PUT: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const body = await req.json();
-      const data = updateCounselingSchema.parse(body);
-      const updated = await service.update(ctx.params.id, data);
+    })),
+    PUT: withAdminApi(guard(async (req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const data = updateCounselingSchema.parse(await req.json());
+      const updated = await service.update(id, data);
       return NextApiResponse.success(updated);
-    }),
-    DELETE: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      await service.delete(ctx.params.id);
+    })),
+    DELETE: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      await service.delete(id);
       return NextApiResponse.noContent();
-    }),
+    })),
   };
 
   return { list, detail };

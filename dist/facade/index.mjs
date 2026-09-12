@@ -1,7 +1,7 @@
 import {
   createSchoolAffairs
-} from "../chunk-5MEAO4RA.mjs";
-import "../chunk-QKXG62LN.mjs";
+} from "../chunk-WRJCFX4U.mjs";
+import "../chunk-VQZ32TWX.mjs";
 import "../chunk-PKLKFT73.mjs";
 import "../chunk-QIK4YES6.mjs";
 export {

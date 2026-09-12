@@ -14,5 +14,17 @@ declare function parseSortParam(sortBy: string, allowed: string[], defaultField:
     field: string;
     order: SortOrder;
 };
+/**
+ * Projection used when a student is embedded in another record (attendance, counseling).
+ * Contact details, birth date and notes are deliberately excluded; fetch the student directly
+ * when they are needed.
+ */
+declare const STUDENT_SUMMARY_SELECT: {
+    readonly id: true;
+    readonly name: true;
+    readonly grade: true;
+    readonly classGroup: true;
+    readonly status: true;
+};
 
-export { DEFAULT_LIMIT, DEFAULT_PAGE, type ListParams, SortOrder, parseSortParam };
+export { DEFAULT_LIMIT, DEFAULT_PAGE, type ListParams, STUDENT_SUMMARY_SELECT, SortOrder, parseSortParam };

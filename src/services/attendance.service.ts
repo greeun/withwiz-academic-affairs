@@ -1,6 +1,6 @@
 import { buildPaginatedResult } from '../types/common';
 import type { PaginatedResult } from '../types/common';
-import { DEFAULT_PAGE, DEFAULT_LIMIT, parseSortParam } from './base-service';
+import { DEFAULT_PAGE, DEFAULT_LIMIT, parseSortParam, STUDENT_SUMMARY_SELECT } from './base-service';
 
 interface ListParams {
   page?: number;
@@ -39,7 +39,7 @@ export class AttendanceService {
         orderBy: { [field]: order },
         skip: (page - 1) * limit,
         take: limit,
-        include: { student: true },
+        include: { student: { select: STUDENT_SUMMARY_SELECT } },
       }),
       this.prisma.attendance.count({ where }),
     ]);
@@ -48,7 +48,7 @@ export class AttendanceService {
   }
 
   async getById(id: string) {
-    return this.prisma.attendance.findUnique({ where: { id }, include: { student: true } });
+    return this.prisma.attendance.findUnique({ where: { id }, include: { student: { select: STUDENT_SUMMARY_SELECT } } });
   }
 
   async create(data: Record<string, unknown>) {
@@ -81,7 +81,7 @@ export class AttendanceService {
       where: {
         date: { gte: startOfDay, lte: endOfDay },
       },
-      include: { student: true },
+      include: { student: { select: STUDENT_SUMMARY_SELECT } },
       orderBy: { student: { name: 'asc' } },
     });
   }

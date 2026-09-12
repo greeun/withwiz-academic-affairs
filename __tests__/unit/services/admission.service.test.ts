@@ -124,7 +124,7 @@ describe('AdmissionService', () => {
       expect(result).toEqual(items);
       expect(mockPrisma.admissionSession.findMany).toHaveBeenCalledWith({
         where: { isOpen: true },
-        include: { registrations: true },
+        include: { _count: { select: { registrations: true } } },
         orderBy: { date: 'asc' },
       });
     });

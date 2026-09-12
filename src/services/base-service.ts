@@ -23,3 +23,16 @@ export function parseSortParam(
   const safeOrder: SortOrder = order === 'asc' ? 'asc' : 'desc';
   return { field: safeField, order: safeOrder };
 }
+
+/**
+ * Projection used when a student is embedded in another record (attendance, counseling).
+ * Contact details, birth date and notes are deliberately excluded; fetch the student directly
+ * when they are needed.
+ */
+export const STUDENT_SUMMARY_SELECT = {
+  id: true,
+  name: true,
+  grade: true,
+  classGroup: true,
+  status: true,
+} as const;

@@ -13,6 +13,8 @@ import { createAttendanceHandlers } from './attendance.handler';
 import { createCounselingHandlers } from './counseling.handler';
 import { createAdmissionHandlers } from './admission.handler';
 import { createDashboardHandlers } from './dashboard.handler';
+import { AcademicAffairsError } from '../errors/academic-affairs-error';
+import type { AdminApiWrapper } from './route';
 
 interface DomainConfig {
   staff?: boolean;
@@ -24,10 +26,15 @@ interface DomainConfig {
   admission?: boolean;
 }
 
-interface AcademicSystemConfig {
+export interface AcademicSystemConfig {
   prisma: any;
   domains: DomainConfig;
-  withAdminApi?: (handler: Function) => Function;
+  /**
+   * Authentication/authorization wrapper applied to every generated handler. Required: there is
+   * no unauthenticated default. Use `createMenuApi(...)` / `createSchoolAffairs(...).rbac`
+   * (e.g. `(h) => rbac.withMenuApi('students', h)`) or `adaptContextWrapper` for toolkit wrappers.
+   */
+  withAdminApi: AdminApiWrapper;
 }
 
 interface HandlerSet {
@@ -68,13 +75,17 @@ interface AcademicSystem {
   };
 }
 
-// Default passthrough middleware if none provided
-const defaultWithAdminApi = (handler: Function) => handler;
-
 export function createAcademicSystem(config: AcademicSystemConfig): AcademicSystem {
   const services: AcademicSystem['services'] = {};
   const handlers: AcademicSystem['handlers'] = {};
-  const withAdminApi = config.withAdminApi ?? defaultWithAdminApi;
+  const withAdminApi = config.withAdminApi;
+  if (typeof withAdminApi !== 'function') {
+    throw new AcademicAffairsError(
+      'VALIDATION',
+      'createAcademicSystem requires `withAdminApi`; handlers are never exposed without an auth wrapper',
+      500
+    );
+  }
 
   if (config.domains.staff) {
     services.staff = new StaffService(config.prisma);

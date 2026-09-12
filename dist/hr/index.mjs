@@ -47,12 +47,16 @@ var createEmployeeSchema = z.object({
   employmentType: employmentTypeEnum.default("REGULAR"),
   status: employeeStatusEnum.default("ACTIVE")
 });
+var { nationalId: _nationalId, ...employeeBaseWithoutPii } = employeeBase;
 var updateEmployeeSchema = z.object({
-  ...employeeBase,
+  ...employeeBaseWithoutPii,
   name: z.string().min(1).max(60).optional(),
   employmentType: employmentTypeEnum.optional(),
   status: employeeStatusEnum.optional(),
   isActive: z.boolean().optional()
+});
+var updateEmployeePiiSchema = z.object({
+  nationalId: nationalId.nullable().optional()
 });
 var listEmployeeQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -241,6 +245,7 @@ export {
   updateCareerSchema,
   updateContractSchema,
   updateEducationSchema,
+  updateEmployeePiiSchema,
   updateEmployeeSchema,
   updateFamilySchema,
   updateLeaveBalanceSchema,

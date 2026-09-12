@@ -46,6 +46,7 @@ export function createSchoolAffairs(
   const menuApi = createMenuApi({
     auth: config.auth,
     superAdminOnlyKeys: config.rbac.superAdminOnlyKeys ?? [],
+    superAdminCheck: config.rbac.superAdminCheck,
   });
 
   return {

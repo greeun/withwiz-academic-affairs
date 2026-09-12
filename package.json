@@ -137,12 +137,12 @@
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.0",
-    "@tiptap/core": "^3.0.0",
-    "@tiptap/react": "^3.0.0",
+    "@tiptap/core": "^3.30.5",
+    "@tiptap/react": "^3.30.5",
     "korean-lunar-calendar": "^0.3.6"
   },
   "peerDependencies": {
-    "@withwiz/toolkit": ">=0.7.0-rc.0",
+    "@withwiz/toolkit": "^0.11.0",
     "next": ">=15",
     "react": ">=18",
     "sonner": ">=2",
@@ -157,13 +157,14 @@
     "@testing-library/react": "^16.3.2",
     "@types/node": "^22.19.18",
     "@types/react": "^19.2.14",
-    "@withwiz/toolkit": "file:../withwiz-toolkit",
+    "@withwiz/toolkit": "^0.11.0",
     "jsdom": "^26.1.0",
-    "next": "^16.2.6",
+    "next": "^16.3.3",
     "sonner": "^2.0.7",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.11",
     "zod": "^4.4.3"
   }
 }

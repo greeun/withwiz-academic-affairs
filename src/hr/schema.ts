@@ -37,12 +37,23 @@ export const createEmployeeSchema = z.object({
   status: employeeStatusEnum.default("ACTIVE"),
 });
 
+const { nationalId: _nationalId, ...employeeBaseWithoutPii } = employeeBase;
+
+/**
+ * General edit path. `nationalId` is intentionally excluded: it is gated by `canManagePii`
+ * and must go through `updateEmployeePiiSchema` after that check.
+ */
 export const updateEmployeeSchema = z.object({
-  ...employeeBase,
+  ...employeeBaseWithoutPii,
   name: z.string().min(1).max(60).optional(),
   employmentType: employmentTypeEnum.optional(),
   status: employeeStatusEnum.optional(),
   isActive: z.boolean().optional(),
+});
+
+/** PII-only edit path; the host must verify `canManagePii` before applying it. */
+export const updateEmployeePiiSchema = z.object({
+  nationalId: nationalId.nullable().optional(),
 });
 
 export const listEmployeeQuerySchema = z.object({
@@ -57,6 +68,7 @@ export const listEmployeeQuerySchema = z.object({
 
 export type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>;
 export type UpdateEmployeeInput = z.infer<typeof updateEmployeeSchema>;
+export type UpdateEmployeePiiInput = z.infer<typeof updateEmployeePiiSchema>;
 export type ListEmployeeQuery = z.infer<typeof listEmployeeQuerySchema>;
 
 // ─── 하위 도메인: 학력 / 경력 / 가족 / 자격 ───────────────────────────────

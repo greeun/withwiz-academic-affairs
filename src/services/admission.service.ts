@@ -20,6 +20,9 @@ interface RegistrationListParams {
 const SESSION_SORT_ALLOWED = ['createdAt', 'date', 'title', 'updatedAt'];
 const REGISTRATION_SORT_ALLOWED = ['createdAt', 'applicantName', 'updatedAt'];
 
+/** Session lists expose only a registration count; applicant contact data stays in `listRegistrations`. */
+const REGISTRATION_COUNT_INCLUDE = { _count: { select: { registrations: true } } } as const;
+
 export class AdmissionService {
   constructor(private prisma: any) {}
 
@@ -39,7 +42,7 @@ export class AdmissionService {
         orderBy: { [field]: order },
         skip: (page - 1) * limit,
         take: limit,
-        include: { registrations: true },
+        include: REGISTRATION_COUNT_INCLUDE,
       }),
       this.prisma.admissionSession.count({ where }),
     ]);
@@ -69,7 +72,7 @@ export class AdmissionService {
   async getOpenSessions() {
     return this.prisma.admissionSession.findMany({
       where: { isOpen: true },
-      include: { registrations: true },
+      include: REGISTRATION_COUNT_INCLUDE,
       orderBy: { date: 'asc' },
     });
   }

@@ -1,11 +1,15 @@
 /**
  * Filename sanitizer for HWPX outputs (Sprint 3 amendment (c)).
  *
- * - Strips path separators (`/`, `\\`), control characters, and `..`.
+ * - Strips path separators (`/`, `\\`), control characters, `..`, and header-delimiter
+ *   characters (`"`, `'`, `;`) so the result is safe inside `Content-Disposition` either as
+ *   `filename="..."` or via `encodeRfc5987` as `filename*=`.
+ * - Drops leading dots (no hidden/dotfiles such as `.htaccess`).
  * - Collapses internal whitespace.
  * - Trims to 200 UTF-8 bytes to stay well under common ZIP filename limits.
  */
-const CONTROL_CHAR_RE = new RegExp("[\\x00-\\x1F\\x7F]", "g");
+const CONTROL_CHAR_RE = new RegExp("[\\x00-\\x1F\\x7F\\u0085\\u2028\\u2029]", "g");
+const HEADER_DELIM_RE = /["';]/g;
 
 export function sanitizeFilename(name: string): string {
   let s = name ?? "";
@@ -13,10 +17,13 @@ export function sanitizeFilename(name: string): string {
   s = s.replace(/\\/g, "_");
   s = s.replace(/\//g, "_");
   s = s.replace(/\.\.+/g, "_");
+  s = s.replace(HEADER_DELIM_RE, "_");
   // Remove control chars (0x00–0x1F, 0x7F).
   s = s.replace(CONTROL_CHAR_RE, "_");
   // Collapse runs of whitespace.
   s = s.replace(/\s+/g, " ").trim();
+  // No leading dots: avoids dotfiles and lone "." names.
+  s = s.replace(/^\.+/, "");
   if (s.length === 0) s = "untitled";
 
   // Trim to 200 UTF-8 bytes.

@@ -9,7 +9,7 @@ import {
 } from "../chunk-J5N76ASB.mjs";
 import {
   adminFetch
-} from "../chunk-L55N6LYP.mjs";
+} from "../chunk-JSUEPRBT.mjs";
 import {
   NextApiResponse
 } from "../chunk-4AHS2SIY.mjs";

@@ -68,6 +68,10 @@ declare const createEmployeeSchema: z.ZodObject<{
     notes: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
 }, z.core.$strip>;
+/**
+ * General edit path. `nationalId` is intentionally excluded: it is gated by `canManagePii`
+ * and must go through `updateEmployeePiiSchema` after that check.
+ */
 declare const updateEmployeeSchema: z.ZodObject<{
     name: z.ZodOptional<z.ZodString>;
     employmentType: z.ZodOptional<z.ZodEnum<{
@@ -87,7 +91,6 @@ declare const updateEmployeeSchema: z.ZodObject<{
     nameEng: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     birthDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     gender: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    nationalId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bloodType: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     militaryService: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phoneMobile: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -100,6 +103,10 @@ declare const updateEmployeeSchema: z.ZodObject<{
     resignDate: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     notes: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     sortOrder: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strip>;
+/** PII-only edit path; the host must verify `canManagePii` before applying it. */
+declare const updateEmployeePiiSchema: z.ZodObject<{
+    nationalId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.core.$strip>;
 declare const listEmployeeQuerySchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
@@ -118,8 +125,8 @@ declare const listEmployeeQuerySchema: z.ZodObject<{
     }>>;
     sort: z.ZodDefault<z.ZodEnum<{
         name: "name";
-        sortOrder: "sortOrder";
         hireDate: "hireDate";
+        sortOrder: "sortOrder";
         createdAt: "createdAt";
     }>>;
     order: z.ZodDefault<z.ZodEnum<{
@@ -129,6 +136,7 @@ declare const listEmployeeQuerySchema: z.ZodObject<{
 }, z.core.$strip>;
 type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>;
 type UpdateEmployeeInput = z.infer<typeof updateEmployeeSchema>;
+type UpdateEmployeePiiInput = z.infer<typeof updateEmployeePiiSchema>;
 type ListEmployeeQuery = z.infer<typeof listEmployeeQuerySchema>;
 declare const careerTypeEnum: z.ZodEnum<{
     EDUCATIONAL: "EDUCATIONAL";
@@ -421,4 +429,4 @@ type CreateReviewInput = z.infer<typeof createReviewSchema>;
  */
 declare function getHrViewer(prisma: any, userId: string): Promise<HrViewer | null>;
 
-export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateLeaveBalanceInput, type CreateLeaveInput, type CreateQualificationInput, type CreateReviewInput, type CreateTrainingInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createLeaveBalanceSchema, createLeaveSchema, createQualificationSchema, createReviewSchema, createTrainingSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, leaveStatusEnum, leaveTypeEnum, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeeSchema, updateFamilySchema, updateLeaveBalanceSchema, updateLeaveSchema, updateQualificationSchema, updateReviewSchema, updateTrainingSchema };
+export { type CreateAppointmentInput, type CreateCareerInput, type CreateContractInput, type CreateEducationInput, type CreateEmployeeInput, type CreateFamilyInput, type CreateLeaveBalanceInput, type CreateLeaveInput, type CreateQualificationInput, type CreateReviewInput, type CreateTrainingInput, type HrViewer, type ListEmployeeQuery, type UpdateEmployeeInput, type UpdateEmployeePiiInput, appointmentTypeEnum, canEdit, canManagePii, canReadAll, careerTypeEnum, createAppointmentSchema, createCareerSchema, createContractSchema, createEducationSchema, createEmployeeSchema, createFamilySchema, createLeaveBalanceSchema, createLeaveSchema, createQualificationSchema, createReviewSchema, createTrainingSchema, employeeStatusEnum, employmentTypeEnum, getHrViewer, leaveStatusEnum, leaveTypeEnum, listEmployeeQuerySchema, qualificationTypeEnum, scopeWhere, updateAppointmentSchema, updateCareerSchema, updateContractSchema, updateEducationSchema, updateEmployeePiiSchema, updateEmployeeSchema, updateFamilySchema, updateLeaveBalanceSchema, updateLeaveSchema, updateQualificationSchema, updateReviewSchema, updateTrainingSchema };

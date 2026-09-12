@@ -1,83 +1,95 @@
+import { z } from 'zod';
 import { AcademicCalendarService } from '../services/academic-calendar.service';
-import { createTimetableSchema, updateTimetableSchema, createAcademicEventSchema, updateAcademicEventSchema } from '../validators/academic-calendar.validator';
+import {
+  createTimetableSchema,
+  updateTimetableSchema,
+  createAcademicEventSchema,
+  updateAcademicEventSchema,
+  academicEventTypeEnum,
+} from '../validators/academic-calendar.validator';
 import { NextApiResponse } from '../utils/api-response';
+import { guard, listQuerySchema, parseQuery, resolveParam, type AdminApiWrapper } from './route';
 
-export function createAcademicCalendarHandlers(service: AcademicCalendarService, withAdminApi: (handler: Function) => Function) {
+const timetableQuery = listQuerySchema.extend({
+  year: z.coerce.number().int().min(2000).max(2100).optional(),
+  semester: z.coerce.number().int().min(1).max(2).optional(),
+  schoolLevel: z.string().max(32).optional(),
+});
+
+const eventQuery = listQuerySchema.extend({
+  type: academicEventTypeEnum.optional(),
+  schoolLevel: z.string().max(32).optional(),
+});
+
+export function createAcademicCalendarHandlers(service: AcademicCalendarService, withAdminApi: AdminApiWrapper) {
   const timetableList = {
-    GET: withAdminApi(async (req: Request) => {
-      const url = new URL(req.url);
-      const page = Number(url.searchParams.get('page')) || 1;
-      const limit = Number(url.searchParams.get('limit')) || 20;
-      const sortBy = url.searchParams.get('sortBy') || undefined;
-      const year = url.searchParams.get('year') ? Number(url.searchParams.get('year')) : undefined;
-      const semester = url.searchParams.get('semester') ? Number(url.searchParams.get('semester')) : undefined;
-      const schoolLevel = url.searchParams.get('schoolLevel') || undefined;
-
-      const result = await service.listTimetables({ page, limit, sortBy, year, semester, schoolLevel });
+    GET: withAdminApi(guard(async (req) => {
+      const result = await service.listTimetables(parseQuery(req, timetableQuery));
       return NextApiResponse.success(result);
-    }),
-    POST: withAdminApi(async (req: Request) => {
-      const body = await req.json();
-      const data = createTimetableSchema.parse(body);
+    })),
+    POST: withAdminApi(guard(async (req) => {
+      const data = createTimetableSchema.parse(await req.json());
       const created = await service.createTimetable(data);
       return NextApiResponse.created(created);
-    }),
+    })),
   };
 
   const timetableDetail = {
-    GET: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const item = await service.getTimetableById(ctx.params.id);
+    GET: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const item = await service.getTimetableById(id);
       if (!item) return NextApiResponse.notFound();
       return NextApiResponse.success(item);
-    }),
-    PUT: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const body = await req.json();
-      const data = updateTimetableSchema.parse(body);
-      const updated = await service.updateTimetable(ctx.params.id, data);
+    })),
+    PUT: withAdminApi(guard(async (req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const data = updateTimetableSchema.parse(await req.json());
+      const updated = await service.updateTimetable(id, data);
       return NextApiResponse.success(updated);
-    }),
-    DELETE: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      await service.deleteTimetable(ctx.params.id);
+    })),
+    DELETE: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      await service.deleteTimetable(id);
       return NextApiResponse.noContent();
-    }),
+    })),
   };
 
   const eventList = {
-    GET: withAdminApi(async (req: Request) => {
-      const url = new URL(req.url);
-      const page = Number(url.searchParams.get('page')) || 1;
-      const limit = Number(url.searchParams.get('limit')) || 20;
-      const sortBy = url.searchParams.get('sortBy') || undefined;
-      const type = url.searchParams.get('type') || undefined;
-      const schoolLevel = url.searchParams.get('schoolLevel') || undefined;
-
-      const result = await service.listEvents({ page, limit, sortBy, type, schoolLevel });
+    GET: withAdminApi(guard(async (req) => {
+      const result = await service.listEvents(parseQuery(req, eventQuery));
       return NextApiResponse.success(result);
-    }),
-    POST: withAdminApi(async (req: Request) => {
-      const body = await req.json();
-      const data = createAcademicEventSchema.parse(body);
+    })),
+    POST: withAdminApi(guard(async (req) => {
+      const data = createAcademicEventSchema.parse(await req.json());
       const created = await service.createEvent(data);
       return NextApiResponse.created(created);
-    }),
+    })),
   };
 
   const eventDetail = {
-    GET: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const item = await service.getEventById(ctx.params.id);
+    GET: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const item = await service.getEventById(id);
       if (!item) return NextApiResponse.notFound();
       return NextApiResponse.success(item);
-    }),
-    PUT: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      const body = await req.json();
-      const data = updateAcademicEventSchema.parse(body);
-      const updated = await service.updateEvent(ctx.params.id, data);
+    })),
+    PUT: withAdminApi(guard(async (req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      const data = updateAcademicEventSchema.parse(await req.json());
+      const updated = await service.updateEvent(id, data);
       return NextApiResponse.success(updated);
-    }),
-    DELETE: withAdminApi(async (req: Request, ctx: { params: { id: string } }) => {
-      await service.deleteEvent(ctx.params.id);
+    })),
+    DELETE: withAdminApi(guard(async (_req, _actor, props) => {
+      const id = await resolveParam(props);
+      if (!id) return NextApiResponse.notFound();
+      await service.deleteEvent(id);
       return NextApiResponse.noContent();
-    }),
+    })),
   };
 
   return {

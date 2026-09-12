@@ -1,5 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createAcademicSystem } from '@/handlers/create-system';
+import type { AdminApiWrapper } from '@/handlers/route';
+
+const passthrough: AdminApiWrapper = (handler) => (req, props) =>
+  handler(req, { userId: 'u1', permissions: ['*'], groups: [] }, props);
 
 function createMockPrisma() {
   const makeCrudMock = () => ({
@@ -29,10 +33,18 @@ function createMockPrisma() {
 }
 
 describe('createAcademicSystem', () => {
+  it('throws when withAdminApi is missing (no unauthenticated default)', () => {
+    const prisma = createMockPrisma();
+    expect(() =>
+      createAcademicSystem({ prisma: prisma as never, domains: { staff: true } } as never),
+    ).toThrow(/withAdminApi/);
+  });
+
   it('creates system with services when domains are enabled', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { staff: true },
     });
 
@@ -43,6 +55,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { staff: false },
     });
 
@@ -56,6 +69,7 @@ describe('createAcademicSystem', () => {
 
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { staff: true },
     });
 
@@ -68,6 +82,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: {},
     });
 
@@ -79,6 +94,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { staff: true, faq: true, student: true },
     });
 
@@ -93,6 +109,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: {
         staff: true,
         faq: true,
@@ -141,6 +158,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { academicCalendar: true },
     });
 
@@ -161,6 +179,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { staff: true, student: true },
     });
 
@@ -172,6 +191,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: {},
     });
 
@@ -182,6 +202,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: { staff: true, faq: false },
     });
 
@@ -193,6 +214,7 @@ describe('createAcademicSystem', () => {
     const prisma = createMockPrisma();
     const system = createAcademicSystem({
       prisma: prisma as never,
+      withAdminApi: passthrough,
       domains: {
         staff: true,
         academicCalendar: true,

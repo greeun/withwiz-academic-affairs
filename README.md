@@ -96,16 +96,50 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 }
 ```
 
-### 2. Build an API route with the middleware wrapper
+### 2. Build an API route with an auth wrapper
+
+Every generated handler receives `(req, actor, props)` and **must** be wrapped: `createAcademicSystem` throws
+if `withAdminApi` is missing, so nothing is ever exposed unauthenticated. Build the wrapper from the package
+RBAC (`createSchoolAffairs(...).rbac` / `createMenuApi`) so menuKey permissions are enforced:
+
+```ts
+// lib/academic.ts
+import { createSchoolAffairs } from "@withwiz/academic-affairs/facade";
+import { createAcademicSystem } from "@withwiz/academic-affairs/handlers";
+
+const affairs = createSchoolAffairs({ prisma, auth, rbac: { menuKeys: ["students", "attendance"] } });
+
+export const academic = createAcademicSystem({
+  prisma,
+  domains: { student: true, attendance: true },
+  // Handlers of this system are gated by the "students" menuKey.
+  withAdminApi: (handler) => affairs.rbac.withMenuApi("students", handler),
+});
+```
 
 ```ts
 // app/api/admin/students/route.ts
-import { withAdminApi } from "@withwiz/academic-affairs/infrastructure/middleware";
-import { studentHandlers } from "@withwiz/academic-affairs/handlers";
+import { academic } from "@/lib/academic";
 
-export const GET  = withAdminApi(studentHandlers.list);
-export const POST = withAdminApi(studentHandlers.create);
+export const { GET, POST } = academic.handlers.student!.list;
 ```
+
+```ts
+// app/api/admin/students/[id]/route.ts
+export const { GET, PUT, DELETE } = academic.handlers.student!.detail;
+```
+
+If you authenticate with `@withwiz/toolkit`'s `withAdminApi` instead, bridge it with `adaptContextWrapper`,
+which resolves the JWT user into a `StaffActor` (and rejects users without a role):
+
+```ts
+import { withAdminApi } from "@withwiz/academic-affairs/infrastructure/middleware";
+import { adaptContextWrapper } from "@withwiz/academic-affairs/handlers";
+
+const wrapper = adaptContextWrapper(withAdminApi as never, (user) => auth.getStaffByUserId(user.id));
+```
+
+List endpoints accept `page`, `limit` (max 200) and `sortBy`; invalid filters return `400`.
 
 ### 3. Use a domain service directly
 

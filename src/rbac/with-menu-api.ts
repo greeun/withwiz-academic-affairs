@@ -7,6 +7,8 @@ export interface MenuApiConfig {
   auth: IAuthProvider;
   /** menuKeys that ONLY system roles may access (e.g. 'roles', 'groups', 'menu-resources'). */
   superAdminOnlyKeys: ReadonlyArray<string>;
+  /** Override the default super-admin check (`actor.role.isSystem === true`). */
+  superAdminCheck?: (actor: StaffActor) => boolean;
 }
 
 function jsonError(status: number, message: string): Response {
@@ -24,6 +26,7 @@ export interface MenuApiBundle {
 
 export function createMenuApi(config: MenuApiConfig): MenuApiBundle {
   const { auth, superAdminOnlyKeys } = config;
+  const isSuperAdmin = config.superAdminCheck ?? ((actor: StaffActor) => actor.role?.isSystem === true);
 
   async function resolveActor(req: Request): Promise<StaffActor | null> {
     return auth.getCurrentStaff(req);
@@ -34,7 +37,7 @@ export function createMenuApi(config: MenuApiConfig): MenuApiBundle {
       const actor = await resolveActor(req);
       if (!actor) return jsonError(401, '인증이 필요합니다');
 
-      const isSystem = actor.role?.isSystem === true;
+      const isSystem = isSuperAdmin(actor) === true;
       if (!actor.permissions.length && !isSystem) {
         return jsonError(403, '역할이 할당되지 않았습니다');
       }
@@ -53,7 +56,7 @@ export function createMenuApi(config: MenuApiConfig): MenuApiBundle {
     return async (req: Request, props?: unknown): Promise<Response> => {
       const actor = await resolveActor(req);
       if (!actor) return jsonError(401, '인증이 필요합니다');
-      const isSystem = actor.role?.isSystem === true;
+      const isSystem = isSuperAdmin(actor) === true;
       if (!actor.permissions.length && !isSystem) {
         return jsonError(403, '역할이 할당되지 않았습니다');
       }
@@ -65,7 +68,7 @@ export function createMenuApi(config: MenuApiConfig): MenuApiBundle {
     return async (req: Request, props?: unknown): Promise<Response> => {
       const actor = await resolveActor(req);
       if (!actor) return jsonError(401, '인증이 필요합니다');
-      if (actor.role?.isSystem !== true) {
+      if (isSuperAdmin(actor) !== true) {
         return jsonError(403, '최고 관리자만 접근할 수 있습니다');
       }
       return handler(req, actor, props);

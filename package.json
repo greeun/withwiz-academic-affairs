@@ -1,6 +1,6 @@
 {
   "name": "@withwiz/academic-affairs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Academic Affairs Management System - 학사관리 어드민 프레임워크",
   "license": "MIT",
   "main": "./dist/index.js",

@@ -10,3 +10,6 @@ docs/superpowers/
 .env*
 !.env*.example
 !.env*.template
+
+# Claude Code worktrees live here; they are checkouts of this same repo
+.claude/worktrees/

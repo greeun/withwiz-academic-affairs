@@ -2,7 +2,7 @@
  * 출결관리 - 학생(Student) zod 검증 스키마.
  * 클라이언트 폼과 서버 라우트가 동일한 모듈을 import 해서 동일 규칙을 보장한다.
  *
- * S5-d: 4-튜플 키(`hostGrade`/`hostClass`/`homeroomStaffId`/`assistantHomeroomStaffId`) 제거.
+ * S5-d: 4-튜플 키(학년/반/`homeroomStaffId`/`assistantHomeroomStaffId`) 제거.
  *   - `classGroupId` (반 그룹 FK), `grade` (학년), `personId|name+birthdate`(인물 연결) 기반.
  *   - 담임/부담임은 ClassGroup 에 부착되므로 학생 폼에서 제거됨.
  */
@@ -78,7 +78,7 @@ const studentBaseFields = z.object({
   schoolLevel: schoolLevelSchema,
   grade: gradeSchema,
   // S5-d+: 출석번호는 선택 입력. 미부여 학생은 null.
-  hostNumber: intRange1to99.nullable(),
+  attendanceNumber: intRange1to99.nullable(),
   homeSchoolName: z
     .string()
     .trim()

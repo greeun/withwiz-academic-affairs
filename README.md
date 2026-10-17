@@ -157,6 +157,22 @@ The package ships `prisma/academic.prisma`, `prisma/rbac.prisma`, and
 `prisma/menu-resource.prisma`. Copy or include them in your host application's
 Prisma schema, then run `prisma generate` / `prisma migrate` as usual.
 
+The attendance helpers (`@withwiz/academic-affairs/attendance`) query the host's
+`student` model and expect an optional attendance number field named
+`attendanceNumber` (`Int?`).
+
+## Migration
+
+### 0.3.0
+
+- The attendance number field is now `attendanceNumber` in the student schema,
+  `NotificationStudentRow`, and the notification queries. Rename the field in your
+  `Student` Prisma model; to keep the existing database column, map it:
+  `attendanceNumber Int? @map("<existing_column>")`.
+- `LEGACY_ENTRY_KEYS` now lists only `academicYear` and `schoolLevel`. Other
+  removed keys are still rejected by the strict entry schemas.
+- `dist/` is no longer committed; it is built on publish.
+
 ## Package Layout
 
 ```

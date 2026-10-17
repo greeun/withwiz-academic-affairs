@@ -155,6 +155,21 @@ import {
 스키마에 복사하거나 include한 뒤 평소대로 `prisma generate` / `prisma migrate`를
 실행하면 됩니다.
 
+출결 헬퍼(`@withwiz/academic-affairs/attendance`)는 호스트의 `student` 모델을 조회하며,
+선택 항목인 출석번호 필드가 `attendanceNumber`(`Int?`)라는 이름으로 있어야 합니다.
+
+## 마이그레이션
+
+### 0.3.0
+
+- 출석번호 필드 이름이 학생 스키마, `NotificationStudentRow`, 통지서 조회에서 모두
+  `attendanceNumber`로 바뀌었습니다. 호스트의 `Student` Prisma 모델에서 필드 이름을
+  바꾸고, 기존 DB 컬럼을 유지하려면 `attendanceNumber Int? @map("<기존_컬럼명>")`처럼
+  매핑합니다.
+- `LEGACY_ENTRY_KEYS`에는 이제 `academicYear`와 `schoolLevel`만 남습니다. 목록에서
+  빠진 나머지 옛 키도 strict 스키마가 계속 거부합니다.
+- `dist/`는 더 이상 커밋하지 않고, 발행할 때 빌드합니다.
+
 ## 패키지 구조
 
 ```

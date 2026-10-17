@@ -6,7 +6,7 @@
  * every affected (studentId, date) against `snapshotAt` and returns 409 if any
  * row is newer. Future-date input is rejected server-side (KST today is the cap).
  *
- * S5-b: 4-튜플 키 (academicYear/schoolLevel/hostGrade/hostClass) 제거 →
+ * S5-b: 4-튜플 키 (academicYear/schoolLevel/학년/반) 제거 →
  * `classGroupId` 단일 키. 레거시 키가 본문/쿼리에 섞여 오면 422 + 명시적 마이그레이션
  * 메시지로 거부한다. UI 마이그레이션이 끝날 때까지 "silent fallback"은 금지.
  */
@@ -32,12 +32,10 @@ const dateOnlyString = z
 export const LEGACY_ENTRY_KEYS = [
   "academicYear",
   "schoolLevel",
-  "hostGrade",
-  "hostClass",
 ] as const;
 
 export const LEGACY_KEY_MESSAGE =
-  "S5: classGroupId only — 4-튜플 키(academicYear/schoolLevel/hostGrade/hostClass)는 더 이상 지원하지 않습니다.";
+  "S5: classGroupId only — 4-튜플 키(academicYear/schoolLevel/학년/반)는 더 이상 지원하지 않습니다.";
 
 /**
  * Returns the legacy key names present in the given record, or null if none.

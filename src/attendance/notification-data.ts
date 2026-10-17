@@ -35,7 +35,7 @@ export interface NotificationStudentRow {
   // S5-d: 학년은 ClassGroup 분리 이후에도 학생 행 위의 schoolLevel/grade 로 유지된다.
   schoolLevel: SchoolLevel;
   grade: number;
-  hostNumber: number | null;
+  attendanceNumber: number | null;
   classGroupId: string;
   classGroupName: string;
   homeSchoolName: string;
@@ -300,7 +300,7 @@ export async function loadListData(
       orderBy: [
         { schoolLevel: "asc" },
         { grade: "asc" },
-        { hostNumber: "asc" },
+        { attendanceNumber: "asc" },
       ],
       include: {
         classGroup: {
@@ -325,7 +325,7 @@ export async function loadListData(
     academicYear: s.academicYear,
     schoolLevel: s.schoolLevel,
     grade: s.grade ?? 0,
-    hostNumber: s.hostNumber,
+    attendanceNumber: s.attendanceNumber,
     classGroupId: s.classGroup?.id ?? input.classGroupId,
     classGroupName: s.classGroup?.name ?? "",
     homeSchoolName: s.homeSchoolName,
@@ -406,7 +406,7 @@ export async function loadStudentData(
     academicYear: student.academicYear,
     schoolLevel: student.schoolLevel,
     grade: student.grade ?? 0,
-    hostNumber: student.hostNumber,
+    attendanceNumber: student.attendanceNumber,
     classGroupId: student.classGroup?.id ?? student.classGroupId ?? "",
     classGroupName: student.classGroup?.name ?? "",
     homeSchoolName: student.homeSchoolName,

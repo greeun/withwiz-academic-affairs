@@ -7,7 +7,7 @@ import { todayKstString } from "./date-rules";
 
 const dateOnlyRegex = /^\d{4}-\d{2}-\d{2}$/;
 
-// S5-d: 4-튜플(`schoolLevel`,`hostGrade`,`hostClass`) 제거 → `classGroupId`
+// S5-d: 4-튜플(`schoolLevel`,학년,반) 제거 → `classGroupId`
 // 단일 키. Bulk ZIP 은 `classGroupId` 미지정시 caller 접근 그룹 전체.
 export const notificationListQuerySchema = z.object({
   year: z.coerce.number().int().min(2000).max(2100),
